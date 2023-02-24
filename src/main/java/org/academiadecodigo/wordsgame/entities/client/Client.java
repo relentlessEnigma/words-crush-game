@@ -1,7 +1,7 @@
 package org.academiadecodigo.wordsgame.entities.client;
 
 import org.academiadecodigo.bootcamp.Prompt;
-import org.academiadecodigo.wordsgame.entities.server.ServerDispatch;
+import org.academiadecodigo.wordsgame.entities.server.GameServer;
 import org.academiadecodigo.wordsgame.entities.users.Admin;
 import org.academiadecodigo.wordsgame.entities.users.Player;
 import org.academiadecodigo.wordsgame.entities.users.Roles;
@@ -84,7 +84,7 @@ public class Client implements Runnable{
         registerInWaitingRoom(user);
         registerInChatManagerClass(user);
 
-        if(actualStage.getUsersInTheRoom().size() == ServerDispatch.MAX_CLIENTS) createAndStartNewThread(actualStage);
+        if(actualStage.getUsersInTheRoom().size() == GameServer.MAX_CLIENTS) createAndStartNewThread(actualStage);
 
         createAndStartNewThread(user);
         user.getClientDispatch().notifyPlayer(welcomeMessageNotifications(user), user);
@@ -165,7 +165,7 @@ public class Client implements Runnable{
      * Starts the thread after users are created
      */
     private Stage createInstanceOfStage(String filePath) {
-        return WaitingRoom.getInstance(new Grid(filePath), ServerDispatch.MAX_CLIENTS, new CopyOnWriteArrayList<>());
+        return WaitingRoom.getInstance(new Grid(filePath), GameServer.MAX_CLIENTS, new CopyOnWriteArrayList<>());
     }
 
     /**

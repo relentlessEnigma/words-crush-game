@@ -2,17 +2,15 @@ package org.academiadecodigo.wordsgame.entities.server;
 
 import org.academiadecodigo.wordsgame.entities.client.Client;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
-import org.academiadecodigo.wordsgame.game.grid.game.Grid;
 import org.academiadecodigo.wordsgame.misc.Messages;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ServerDispatch {
+public class GameServer {
 
     private CopyOnWriteArrayList<Client> clientsList = new CopyOnWriteArrayList<>();
     private final ExecutorService fixedPool;
@@ -22,7 +20,7 @@ public class ServerDispatch {
     private String filePath;
     public static Integer MAX_CLIENTS;
 
-    public ServerDispatch(int portNumber, int nThreads, String filePath) {
+    public GameServer(int portNumber, int nThreads, String filePath) {
         this.nThreads = nThreads;
         this.portNumber = portNumber;
         this.fixedPool = Executors.newFixedThreadPool(this.nThreads);

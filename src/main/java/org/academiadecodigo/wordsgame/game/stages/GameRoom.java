@@ -1,7 +1,7 @@
 package org.academiadecodigo.wordsgame.game.stages;
 
 import lombok.Getter;
-import org.academiadecodigo.wordsgame.entities.server.ServerDispatch;
+import org.academiadecodigo.wordsgame.entities.server.GameServer;
 import org.academiadecodigo.wordsgame.entities.users.User;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
 import org.academiadecodigo.wordsgame.game.grid.game.Grid;
@@ -54,7 +54,7 @@ public class GameRoom extends Stage {
 
     public synchronized void playerLost(User user){
         ((FinishRoom) finishStage).addUserToStage(user);
-        if(finishStage.getUsersInTheRoom().size() == ServerDispatch.MAX_CLIENTS-1) checkForTheWinner();
+        if(finishStage.getUsersInTheRoom().size() == GameServer.MAX_CLIENTS-1) checkForTheWinner();
     }
 
     private void checkForTheWinner() {
