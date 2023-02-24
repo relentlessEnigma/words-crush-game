@@ -26,7 +26,7 @@ public class PmCommandExecutor extends CommandExecutor{
     protected String executeValidCommand(String command, User user, List<User> usersList) {
 
         if(usersList.size() == 1) {
-            return Messages.ERROR_NOT_ENOUGH_PLAYERS_IN_ROOM;
+            return Messages.get("ERROR_NOT_ENOUGH_PLAYERS_IN_ROOM");
         }
         String[] strArray = new String[removeUserFromList(user, usersList).size()];
         StringInputScanner personalMessage = new StringInputScanner();
@@ -36,11 +36,11 @@ public class PmCommandExecutor extends CommandExecutor{
         }
 
         User userDestiny = removeUserFromList(user, usersList)
-                .get(new PromptMenu<Integer>().createNewMenu(strArray, Messages.INFO_USERS_AVAILABLE, ChatCommandsMessagesTrafficManager.getUserPrompt(user))-1);
+                .get(new PromptMenu<Integer>().createNewMenu(strArray, Messages.get("INFO_USERS_AVAILABLE"), ChatCommandsMessagesTrafficManager.getUserPrompt(user))-1);
 
-        personalMessage.setMessage(Messages.SEND_MESSAGE_TO_PLAYER);
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(String.format(Messages.PLAYER_SENT_PM_TO_OTHER, user.getUserName(), userDestiny.getUserName(), Colors.PURPLE_BOLD_BRIGHT, Colors.RESET));
-        userDestiny.getClientDispatch().notifyPlayer(String.format(Messages.PLAYER_MESSAGE_FOR_PM, user.getUserName(), ChatCommandsMessagesTrafficManager.getUserPrompt(user).getUserInput(personalMessage)), userDestiny);
+        personalMessage.setMessage(Messages.get("SEND_MESSAGE_TO_PLAYER"));
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(String.format(Messages.get("PLAYER_SENT_PM_TO_OTHER"), user.getUserName(), userDestiny.getUserName(), Colors.PURPLE_BOLD_BRIGHT, Colors.RESET));
+        userDestiny.getClientDispatch().notifyPlayer(String.format(Messages.get("PLAYER_MESSAGE_FOR_PM"), user.getUserName(), ChatCommandsMessagesTrafficManager.getUserPrompt(user).getUserInput(personalMessage)), userDestiny);
 
         return ChatCommandsMessagesTrafficManager.sendPrivateMessageToUser();
     }

@@ -38,8 +38,8 @@ public class ClientDispatch {
      */
     public void sendRules(User user) {
 
-        user.getClientDispatch().getOutStream().println(Messages.ART_GAME_RULES);
-        user.getClientDispatch().getOutStream().println(Messages.INFO_STARTING_GAME_IN);
+        user.getClientDispatch().getOutStream().println(Messages.get("ART_GAME_RULES"));
+        user.getClientDispatch().getOutStream().println(Messages.get("INFO_STARTING_GAME_IN"));
 
         for (int i = 10; i >= 0; i--) {
             try {

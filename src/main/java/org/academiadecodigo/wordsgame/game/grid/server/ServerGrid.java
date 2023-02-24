@@ -41,8 +41,8 @@ public class ServerGrid {
         String[][] grid = createGridStructure(userList.size());
         sendPlayerScoresToGrid(userList, grid);
 
-        sb.append(Messages.SERVER_SCORE_DASHBOARD + Messages.BREAK_LINE);
-        sb.append(Messages.SERVER_SCORE_DASHBOARD_PLAYER_NAME + Messages.BREAK_LINE);
+        sb.append(Messages.get("SERVER_SCORE_DASHBOARD") + Messages.get("BREAK_LINE"));
+        sb.append(Messages.get("SERVER_SCORE_DASHBOARD_PLAYER_NAME") + Messages.get("BREAK_LINE"));
         for (User user : userList) {
             sb.append(user.getUserName().charAt(0)).append(user.getUserName().charAt(1)).append(" ");
         }

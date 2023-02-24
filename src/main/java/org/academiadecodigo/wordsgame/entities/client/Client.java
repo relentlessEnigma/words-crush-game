@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Client implements Runnable{
@@ -59,7 +58,7 @@ public class Client implements Runnable{
     private void setupUser()  {
 
         if(count == 3) System.exit(0);
-        String userName = promptMenu.createNewQuestion(Messages.INFO_SET_NICKNAME, prompt);
+        String userName = promptMenu.createNewQuestion(Messages.get("INFO_SET_NICKNAME"), prompt);
 
         if( isUserAdmin(userName) ) {
             setUserRole(Roles.ADMIN, userName);
@@ -109,7 +108,7 @@ public class Client implements Runnable{
      */
     private boolean adminLogin(){
         failedTry();
-        return promptMenu.createNewQuestion(Messages.INPUT_ADMIN_PASSWORD, prompt)
+        return promptMenu.createNewQuestion(Messages.get("INPUT_ADMIN_PASSWORD"), prompt)
                 .equals(properties.getProperty("admin.password"));
     }
 
@@ -119,7 +118,7 @@ public class Client implements Runnable{
      */
     private @NotNull Admin setupNewAdminAccount() {
         resetTries();
-        String userName = promptMenu.createNewQuestion(Messages.INFO_SET_NICKNAME, prompt);
+        String userName = promptMenu.createNewQuestion(Messages.get("INFO_SET_NICKNAME"), prompt);
         return new Admin(String.format("[ADMIN]%s", userName),0, 3, false, new ClientDispatch(socket, actualStage), socket, actualStage, false);
     }
 
@@ -138,9 +137,9 @@ public class Client implements Runnable{
      * @return
      */
     private String welcomeMessageNotifications(User user) {
-        ChatCommandsMessagesTrafficManager.sendMessageToChat(user, String.format(Messages.INFO_CONNECTED_JOINED_WAITING_ROOM, user.getUserName()));
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(Colors.WHITE_UNDERLINED + user.getUserName() + Colors.RESET + Messages.INFO_PLAYER_JUST_CONNECTED);
-        return (Messages.ART_START_GAME);
+        ChatCommandsMessagesTrafficManager.sendMessageToChat(user, String.format(Messages.get("INFO_CONNECTED_JOINED_WAITING_ROOM"), user.getUserName()));
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(Colors.WHITE_UNDERLINED + user.getUserName() + Colors.RESET + Messages.get("INFO_PLAYER_JUST_CONNECTED"));
+        return (Messages.get("ART_START_GAME"));
     }
 
     /**

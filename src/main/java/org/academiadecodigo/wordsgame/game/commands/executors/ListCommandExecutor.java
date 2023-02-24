@@ -20,12 +20,12 @@ public class ListCommandExecutor extends CommandExecutor{
     protected String executeValidCommand(String command, User user, List<User> usersList) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append(Messages.INFO_LIST_PLAYERS);
+        sb.append(Messages.get("INFO_LIST_PLAYERS"));
 
         for (int i = 0; i < usersList.size(); i++) {
             sb.append(String.format("> %s (%s)\n", usersList.get(i).getUserName(), usersList.get(i).isReady()));
         }
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(String.format(Messages.INFO_SOMEONE_IS_WATCHING_LIST, user.getUserName()));
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(String.format(Messages.get("INFO_SOMEONE_IS_WATCHING_LIST"), user.getUserName()));
 
         return sb.toString();
     }

@@ -119,7 +119,7 @@ public abstract class User implements Runnable {
         if(getLives() > 0) {
             ChatCommandsMessagesTrafficManager.clearScreen(this);
             getClientDispatch().notifyPlayer(getActualStage().getGrid().drawMatrix(), this);
-            getClientDispatch().notifyPlayer(String.format(Messages.SHOW_PLAYER_SCORES, getScore(), getLives()), this);
+            getClientDispatch().notifyPlayer(String.format(Messages.get("SHOW_PLAYER_SCORES"), getScore(), getLives()), this);
             getActualStage().checkUserInput(this, getUserInput());
         } else {
             getActualStage().playerLost(this);

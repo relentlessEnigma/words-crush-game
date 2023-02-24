@@ -19,7 +19,7 @@ public class GameRoom extends Stage {
     public GameRoom(Grid grid, int maxPlayers, List<User> usersInTheRoom) {
         super(grid, maxPlayers, usersInTheRoom);
         this.sg = new ServerGrid();
-        ChatCommandsMessagesTrafficManager.sendMessageToAll(Messages.SET_YOURSELF_READY);
+        ChatCommandsMessagesTrafficManager.sendMessageToAll(Messages.get("SET_YOURSELF_READY"));
     }
 
     public void startStage() {

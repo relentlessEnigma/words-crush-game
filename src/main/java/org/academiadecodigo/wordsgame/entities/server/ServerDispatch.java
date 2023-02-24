@@ -38,8 +38,8 @@ public class ServerDispatch {
 
     public void manageNewConnections() throws IOException {
 
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.INFO_SERVER_ON);
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.INFO_PORT + portNumber);
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_SERVER_ON"));
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_PORT") + portNumber);
 
         //Must have all the players connected to start the game
         while (clientsList.size() < nThreads) {
@@ -47,7 +47,7 @@ public class ServerDispatch {
             Socket clientSocket = serverSocket.accept();
             Client client = new Client(clientSocket, filePath);
             clientsList.add(client);
-            ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.INFO_NEWCONNECTION + clientsList.size());
+            ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_NEWCONNECTION") + clientsList.size());
             fixedPool.submit(client);
         }
     }

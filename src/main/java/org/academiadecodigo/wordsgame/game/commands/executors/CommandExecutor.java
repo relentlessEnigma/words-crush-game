@@ -8,7 +8,7 @@ import java.util.List;
 public abstract class CommandExecutor {
 
     public String execute(String command, User user, List<User> usersList){
-        return isApplicable(command) ? executeValidCommand(command, user, usersList) : Messages.INFO_INVALID_COMMAND;
+        return isApplicable(command) ? executeValidCommand(command, user, usersList) : Messages.get("INFO_INVALID_COMMAND");
     }
 
     public abstract boolean isApplicable(String command);

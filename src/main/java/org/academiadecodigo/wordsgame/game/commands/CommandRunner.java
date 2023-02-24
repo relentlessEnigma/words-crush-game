@@ -15,7 +15,7 @@ public class CommandRunner {
 
     public String runCommand(String command, User user, List<User> usersList){
 
-        if (command.isBlank() || command.isEmpty()) return Messages.INFO_INVALIDBLANKS;
+        if (command.isBlank() || command.isEmpty()) return Messages.get("INFO_INVALIDBLANKS");
 
         for(CommandExecutor executor : commandExecutors) {
             if(executor.isApplicable(command)) {
@@ -23,6 +23,6 @@ public class CommandRunner {
             }
         }
 
-        return Messages.INFO_INVALID_COMMAND;
+        return Messages.get("INFO_INVALID_COMMAND");
     }
 }
