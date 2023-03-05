@@ -1,53 +1,53 @@
 package org.academiadecodigo.wordsgame.entities.server;
 
-import org.academiadecodigo.wordsgame.entities.client.Client;
+import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
 import org.academiadecodigo.wordsgame.misc.Messages;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class GameServer {
 
-    private CopyOnWriteArrayList<Client> clientsList = new CopyOnWriteArrayList<>();
-    private final ExecutorService fixedPool;
-    private ServerSocket serverSocket;
-    private final int nThreads;
-    private int portNumber;
-    private String filePath;
     public static Integer MAX_CLIENTS;
+    private final ExecutorService executor;
+    private final ExecutorCompletionService<Void> executorCompletionService;
+    private final ServerSocket serverSocket;
+    private final String filePath;
+    private int nThreads;
 
-    public GameServer(int portNumber, int nThreads, String filePath) {
+    public GameServer(int portNumber, int nThreads, String filePath) throws IOException {
         this.nThreads = nThreads;
-        this.portNumber = portNumber;
-        this.fixedPool = Executors.newFixedThreadPool(this.nThreads);
         this.filePath = filePath;
-        try {
-            serverSocket = new ServerSocket(Integer.valueOf(portNumber));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.MAX_CLIENTS = nThreads;
 
-        MAX_CLIENTS = nThreads;
-    }
-
-    public void manageNewConnections() throws IOException {
+        executor = Executors.newFixedThreadPool(nThreads);
+        executorCompletionService = new ExecutorCompletionService<>(executor);
+        serverSocket = new ServerSocket(portNumber);
 
         ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_SERVER_ON"));
         ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_PORT") + portNumber);
+    }
 
-        //Must have all the players connected to start the game
-        while (clientsList.size() < nThreads) {
-
-            Socket clientSocket = serverSocket.accept();
-            Client client = new Client(clientSocket, filePath);
-            clientsList.add(client);
-            ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_NEWCONNECTION") + clientsList.size());
-            fixedPool.submit(client);
+    public void manageNewConnections() {
+        int numClients = 0;
+        while (numClients < nThreads) {
+            try {
+                Socket clientSocket = serverSocket.accept();
+                ClientDispatch clientDispatch = new ClientDispatch(clientSocket, filePath);
+                executorCompletionService.submit(clientDispatch, null);
+                numClients++;
+                ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_NEWCONNECTION") + numClients);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    public void close() throws IOException {
+        serverSocket.close();
+        executor.shutdownNow();
+    }
 }

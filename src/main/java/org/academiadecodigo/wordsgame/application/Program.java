@@ -8,13 +8,14 @@ public class Program {
 
     public static void main(String[] args) {
 
-        GameServer server = new GameServer(8001, 2, "src/main/resources/teste.txt");
-
+        GameServer server = null;
         try {
-            server.manageNewConnections();
+            server = new GameServer(8001, 2, "src/main/resources/teste.txt");
         } catch (IOException e) {
+            System.out.println(e);
             throw new RuntimeException(e);
         }
 
+        server.manageNewConnections();
     }
 }
