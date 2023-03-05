@@ -15,10 +15,14 @@ import org.academiadecodigo.wordsgame.game.grid.game.Grid;
 import org.academiadecodigo.wordsgame.game.stages.Stage;
 import org.academiadecodigo.wordsgame.game.stages.WaitingRoom;
 import org.academiadecodigo.wordsgame.misc.Colors;
+import org.academiadecodigo.wordsgame.misc.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
 import org.jetbrains.annotations.NotNull;
 import java.io.*;
 import java.net.Socket;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Getter
@@ -64,8 +68,11 @@ public class ClientDispatch implements Runnable {
 
         if(count == 3) System.exit(0);
         String userName = promptMenu.createNewQuestion(Messages.get("INFO_SET_NICKNAME"), prompt);
+        String password = promptMenu.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
 
-        if( isUserAdmin(userName) ) {
+
+        if( isUserAdmin(userName, password) ) {
+            System.out.println("We got an andim!!!!");
             setUserRole(Roles.ADMIN, userName);
         }
 
@@ -102,8 +109,35 @@ public class ClientDispatch implements Runnable {
      * @param userName
      * @return boolean
      */
-    private boolean isUserAdmin(@NotNull String userName) {
-        return userName.equals(properties.getProperty("admin.name")) && adminLogin();
+    private boolean isUserAdmin(String userName, String password) {
+        Database db = null;
+        try {
+            // get the connection to the database
+            db = new Database();
+            db.connect();
+
+            // prepare the SQL statement to retrieve user info by username and password
+            String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+            PreparedStatement pstmt = db.getConnection().prepareStatement(query);
+            pstmt.setString(1, userName);
+            pstmt.setString(2, password);
+
+            // execute the query and retrieve the results
+            ResultSet rs = pstmt.executeQuery();
+
+            // check if the query returned a result
+            if (rs.next()) {
+                // retrieve the user's role from the result set
+                String role = rs.getString("role");
+                return role.equals("ADMIN");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return false;
     }
 
     /**
