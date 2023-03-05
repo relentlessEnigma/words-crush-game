@@ -37,7 +37,6 @@ public abstract class User implements Runnable {
         this.socket = socket;
         this.actualStage = actualStage;
         this.readRules = readRules;
-        //changed here
     }
 
     /**
@@ -84,12 +83,12 @@ public abstract class User implements Runnable {
         ChatCommandsMessagesTrafficManager.clearScreen(this);
         if( ((FinishRoom) getActualStage()).getWinner() != null) {
             if( ((FinishRoom) getActualStage()).getWinner().equals(this) ) {
-                getClientDispatch().notifyPlayer(String.format("CONGRATULATIONS! You are the Winner with %2d score!", getScore()), this);
+                getClientDispatch().notifyPlayer(String.format("CONGRATULATIONS! You are the Winner with %2d score!", getScore()));
                 ChatCommandsMessagesTrafficManager.sendMessageToAll(Messages.drawWinner(this.getUserName()));
                 return;
             }
         }
-        getClientDispatch().notifyPlayer(String.format("You finished the game with a total Score %2d", getScore()), this);
+        getClientDispatch().notifyPlayer(String.format("You finished the game with a total Score %2d", getScore()));
     }
 
     /**
@@ -113,13 +112,13 @@ public abstract class User implements Runnable {
     protected void behaviourInGameRoom() {
         if(!isReadRules()) {
             ChatCommandsMessagesTrafficManager.clearScreen(this);
-            getClientDispatch().sendRules(this);
+            getClientDispatch().sendRules();
             setReadRules(true);
         }
         if(getLives() > 0) {
             ChatCommandsMessagesTrafficManager.clearScreen(this);
-            getClientDispatch().notifyPlayer(getActualStage().getGrid().drawMatrix(), this);
-            getClientDispatch().notifyPlayer(String.format(Messages.get("SHOW_PLAYER_SCORES"), getScore(), getLives()), this);
+            getClientDispatch().notifyPlayer(getActualStage().getGrid().drawMatrix());
+            getClientDispatch().notifyPlayer(String.format(Messages.get("SHOW_PLAYER_SCORES"), getScore(), getLives()));
             getActualStage().checkUserInput(this, getUserInput());
         } else {
             getActualStage().playerLost(this);

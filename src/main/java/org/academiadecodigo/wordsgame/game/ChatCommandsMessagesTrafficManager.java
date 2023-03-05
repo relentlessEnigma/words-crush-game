@@ -49,8 +49,8 @@ public class ChatCommandsMessagesTrafficManager {
      * Method to clear user's side Screen
      */
     public synchronized static void clearScreen(User user) {
-        user.getClientDispatch().notifyPlayer(Messages.get("ART_CLEAR_SCREEN"), user);
-        user.getClientDispatch().notifyPlayer(Messages.get("ART_GAME_TITLE"), user);
+        user.getClientDispatch().notifyPlayer(Messages.get("ART_CLEAR_SCREEN"));
+        user.getClientDispatch().notifyPlayer(Messages.get("ART_GAME_TITLE"));
     }
 
     /**
@@ -100,7 +100,7 @@ public class ChatCommandsMessagesTrafficManager {
 
         for(User u : usersList) {
             if(!u.equals(userOrigin)) {
-                u.getClientDispatch().notifyPlayer(String.format("%s: %s", userOrigin.getUserName(),message), u);
+                u.getClientDispatch().notifyPlayer(String.format("%s: %s", userOrigin.getUserName(),message));
             }
         }
     }
@@ -153,7 +153,7 @@ public class ChatCommandsMessagesTrafficManager {
                         .createNewMenu(strArray, Messages.get("QUESTION_SELECT_PLAYER_TO_KICK"), getUserPrompt(originUser))-1);
 
         String kickReason = new PromptMenu<String>().createNewQuestion(Messages.get("DEFINE_KICK_MESSAGE"), getUserPrompt(originUser));
-        userDestiny.getClientDispatch().notifyPlayer(String.format(Messages.get("PLAYER_MESSAGE_FOR_KICK"), kickReason), userDestiny);
+        userDestiny.getClientDispatch().notifyPlayer(String.format(Messages.get("PLAYER_MESSAGE_FOR_KICK"), kickReason));
         sendMessageToServer(String.format(Messages.get("INFO_PLAYER_KICKED"), userDestiny.getUserName(), kickReason));
         if(userDestiny instanceof Player) ((Player) userDestiny).kick();
 

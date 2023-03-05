@@ -40,7 +40,7 @@ public class PmCommandExecutor extends CommandExecutor{
 
         personalMessage.setMessage(Messages.get("SEND_MESSAGE_TO_PLAYER"));
         ChatCommandsMessagesTrafficManager.sendMessageToServer(String.format(Messages.get("PLAYER_SENT_PM_TO_OTHER"), user.getUserName(), userDestiny.getUserName(), Colors.PURPLE_BOLD_BRIGHT, Colors.RESET));
-        userDestiny.getClientDispatch().notifyPlayer(String.format(Messages.get("PLAYER_MESSAGE_FOR_PM"), user.getUserName(), ChatCommandsMessagesTrafficManager.getUserPrompt(user).getUserInput(personalMessage)), userDestiny);
+        userDestiny.getClientDispatch().notifyPlayer(String.format(Messages.get("PLAYER_MESSAGE_FOR_PM"), user.getUserName(), ChatCommandsMessagesTrafficManager.getUserPrompt(user).getUserInput(personalMessage)));
 
         return ChatCommandsMessagesTrafficManager.sendPrivateMessageToUser();
     }

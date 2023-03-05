@@ -38,7 +38,7 @@ public class WaitingRoom extends Stage {
     public synchronized void checkUserInput(User user, String message) {
 
         if (message.startsWith("/")) {
-            user.getClientDispatch().notifyPlayer(getCommandRunner().runCommand(message, user, getUsersInTheRoom()), user);
+            user.getClientDispatch().notifyPlayer(getCommandRunner().runCommand(message, user, getUsersInTheRoom()));
             return;
         }
         ChatCommandsMessagesTrafficManager.sendMessageToChat(user, message);

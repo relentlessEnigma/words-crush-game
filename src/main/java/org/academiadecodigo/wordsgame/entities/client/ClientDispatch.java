@@ -93,7 +93,7 @@ public class ClientDispatch implements Runnable {
         if(actualStage.getUsersInTheRoom().size() == GameServer.MAX_CLIENTS) createAndStartNewThread(actualStage);
 
         createAndStartNewThread(user);
-        notifyPlayer(welcomeMessageNotifications(user), user);
+        notifyPlayer(welcomeMessageNotifications(user));
     }
 
 
@@ -201,7 +201,7 @@ public class ClientDispatch implements Runnable {
      * Sends the rules of the game to all users
      * through User's personal CP (Client Dispatch)
      */
-    public void sendRules(User user) {
+    public void sendRules() {
 
         this.outStream.println(Messages.get("ART_GAME_RULES"));
         this.outStream.println(Messages.get("INFO_STARTING_GAME_IN"));
@@ -221,16 +221,8 @@ public class ClientDispatch implements Runnable {
     /**
      * Generates personalized message to self player.
      * @param message to be sent.
-     * @param clientObj to whom.
      */
-    public void notifyPlayer(String message, User clientObj) {
-
-        for (User user : actualStage.getUsersInTheRoom()) {
-            if (user.equals(clientObj)) {
-                this.outStream.println(message);
-            }
-        }
+    public void notifyPlayer(String message) {
+        this.outStream.println(message);
     }
-
-
 }
