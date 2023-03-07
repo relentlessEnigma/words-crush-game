@@ -2,11 +2,13 @@ package org.academiadecodigo.wordsgame.entities.server;
 
 import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
+import org.academiadecodigo.wordsgame.misc.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.concurrent.*;
 
 public class GameServer {
@@ -17,11 +19,13 @@ public class GameServer {
     private final ServerSocket serverSocket;
     private final String filePath;
     private int nThreads;
+    private Database db;
 
-    public GameServer(int portNumber, int nThreads, String filePath) throws IOException {
+    public GameServer(int portNumber, int nThreads, String filePath) throws IOException, SQLException {
+        this.db = new Database();
         this.nThreads = nThreads;
         this.filePath = filePath;
-        this.MAX_CLIENTS = nThreads;
+        MAX_CLIENTS = nThreads;
 
         executor = Executors.newFixedThreadPool(nThreads);
         executorCompletionService = new ExecutorCompletionService<>(executor);
@@ -29,6 +33,8 @@ public class GameServer {
 
         ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_SERVER_ON"));
         ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_PORT") + portNumber);
+
+        db.setupDbTable();
     }
 
     public void manageNewConnections() {
