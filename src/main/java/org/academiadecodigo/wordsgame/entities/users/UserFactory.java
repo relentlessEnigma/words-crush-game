@@ -20,6 +20,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * NEEDS WORK
+ */
 public class UserFactory {
 
     private ProjectProperties properties;

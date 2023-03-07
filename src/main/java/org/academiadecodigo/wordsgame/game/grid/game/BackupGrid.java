@@ -1,5 +1,7 @@
 package org.academiadecodigo.wordsgame.game.grid.game;
 
+import org.jetbrains.annotations.Contract;
+
 /**
  * This class is for Backup Purpose only
  * If the outside file is corrupted or something
@@ -7,6 +9,8 @@ package org.academiadecodigo.wordsgame.game.grid.game;
  * start with the class words
  */
 public class BackupGrid {
+
+    private static int cols = 10;
 
     private static String[] wordsList = {
             "caralho", "damn", "witness",
@@ -30,18 +34,35 @@ public class BackupGrid {
             "winter", "embryo", "vision", "incident", "pound"
     };
 
+    private static int rows = wordsList.length/10;
+
     /**
      * Returns words to grid
-     * @param wordMatrix
      * @return Vector 2D String[][]
      */
-    public static String[][] setWordsForMatrixBackup(String[][] wordMatrix) {
-
-        for(int i = 0; i <= 4; i ++) {
-            for(int j = 0; j <= 9; j++) {
-                wordMatrix[i][j] = wordsList[(i*10)+j];
+    public static String[][] setWordsForMatrixBackup() {
+        String[][] newWordsList = new String[rows][cols];
+        int counter = 0;
+        for (int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                newWordsList[i][j] = addSpacesToWord(wordsList[counter]);
+                counter ++;
             }
         }
-        return wordMatrix;
+        System.out.println(newWordsList[0][0]);
+        return newWordsList;
+    }
+
+    private static String addSpacesToWord(String word) {
+        StringBuilder x = new StringBuilder();
+        for (int j = 0; j < 10; j++) {
+            if (j < word.length()) {
+                x.append(word.charAt(j));
+            } else {
+                x.append(" ");
+            }
+        }
+
+        return x.toString();
     }
 }

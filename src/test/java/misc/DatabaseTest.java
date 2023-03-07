@@ -1,5 +1,6 @@
-package org.academiadecodigo.wordsgame.misc;
+package misc;
 
+import org.academiadecodigo.wordsgame.misc.Database;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
