@@ -8,31 +8,27 @@ package org.academiadecodigo.wordsgame.game.grid.game;
  */
 public class BackupGrid {
 
-    private static int cols = 10;
-
+    //Length must allways be of 50
     private static String[] wordsList = {
-            "caralho", "damn", "witness",
-            "acid", "location", "wake",
-            "X-ray", "export", "indirect",
-            "peanut", "owl", "campaign", "bulb",
-            "quantity", "introduce", "coalition",
-            "sink", "magazine", "feature", "slice",
-            "industry", "purpose", "knife", "immune",
-            "product", "sum", "unrest", "promise", "allow",
-            "gesture", "exploit", "delete", "bark", "reactor",
-            "electron", "missile", "damn", "witness",
-            "acid", "location", "wake",
-            "X-ray", "export", "indirect",
-            "peanut", "owl", "campaign", "bulb",
-            "quantity", "introduce", "coalition",
-            "sink", "magazine", "feature", "slice",
-            "industry", "purpose", "reactor", "electron",
-            "seminar", "grace", "hand", "episode", "laborer",
-            "ideal", "equinox", "affinity", "herb", "oil",
-            "winter", "embryo", "vision", "incident", "pound"
+            "teste", "ola", "witness", "acid", "location",
+            "wake", "X-ray", "export", "indirect", "peanut",
+            "owl", "campaign", "bulb", "quantity", "introduce",
+            "coalition", "sink", "magazine", "feature", "slice",
+            "industry", "purpose", "knife", "immune", "product",
+            "sum", "unrest", "promise", "allow", "gesture",
+            "exploit", "delete", "bark", "reactor", "electron",
+            "missile", "damn", "witness", "acid", "location",
+            "wake", "X-ray", "export", "indirect", "peanut",
+            "owl", "campaign", "bulb", "quantity", "introduce",
+            "coalition", "sink", "magazine", "feature", "slice",
+            "industry", "purpose", "reactor", "electron", "seminar",
+            "grace", "hand", "episode", "laborer", "ideal",
+            "equinox", "affinity", "herb", "oil", "winter",
+            "embryo", "vision", "incident", "pound", "excess"
     };
 
-    private static int rows = wordsList.length/10;
+    private static int cols = 10;
+    private static int rows = (int) Math.ceil((double) wordsList.length / cols);
 
     /**
      * Returns words to grid
@@ -43,13 +39,17 @@ public class BackupGrid {
         int counter = 0;
         for (int i = 0; i < rows; i++) {
             for(int j = 0; j < cols; j++) {
-                newWordsList[i][j] = addSpacesToWord(wordsList[counter]);
+                if (counter < wordsList.length) {
+                    newWordsList[i][j] = addSpacesToWord(wordsList[counter]);
+                } else {
+                    newWordsList[i][j] = addSpacesToWord("");
+                }
                 counter ++;
             }
         }
-        System.out.println(newWordsList[0][0]);
         return newWordsList;
     }
+
 
     private static String addSpacesToWord(String word) {
         StringBuilder x = new StringBuilder();

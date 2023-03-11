@@ -1,7 +1,6 @@
 package org.academiadecodigo.wordsgame.application;
 
 import org.academiadecodigo.wordsgame.entities.server.GameServer;
-
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -16,6 +15,7 @@ public class Program {
             System.out.println(e);
             throw new RuntimeException(e);
         } catch (SQLException e) {
+            System.out.println("Check if Your MySQL service is running!");
             throw new RuntimeException(e);
         }
 

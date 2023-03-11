@@ -58,7 +58,7 @@ class GameServerTest {
         assertNotNull(gameServer.getServerSocket());
         assertNotNull(gameServer.getFilePath());
         assertNotNull(gameServer.getDb());
-        assertEquals(NUM_THREADS, gameServer.getnThreads());
+        assertEquals(NUM_THREADS, gameServer.getNThreads());
     }
 
     @Test

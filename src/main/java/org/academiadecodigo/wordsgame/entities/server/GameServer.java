@@ -1,16 +1,19 @@
 package org.academiadecodigo.wordsgame.entities.server;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
 import org.academiadecodigo.wordsgame.misc.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.concurrent.*;
 
+@Getter
+@Setter
 public class GameServer {
 
     public static Integer MAX_CLIENTS;
@@ -65,31 +68,7 @@ public class GameServer {
         this.executorCompletionService = executorCompletionService;
     }
 
-    public ExecutorService getExecutor() {
-        return executor;
-    }
-
     public ExecutorCompletionService<Void> getExecutorCompletionService() {
         return executorCompletionService;
-    }
-
-    public ServerSocket getServerSocket() {
-        return serverSocket;
-    }
-
-    public static Integer getMaxClients() {
-        return MAX_CLIENTS;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public int getnThreads() {
-        return nThreads;
-    }
-
-    public Database getDb() {
-        return db;
     }
 }
