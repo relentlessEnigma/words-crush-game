@@ -74,6 +74,28 @@ public class GridTest {
     }
 
     @Test
+    public void testCheckPlayerWithInvalidInput() {
+        grid.setWordsForMatrix();
+
+        // Test incorrect input
+        int expectedScore = 0;
+        assertEquals(expectedScore, grid.checkPlayerInput("INCORRECT_WORD"));
+    }
+
+    @Test
+    public void testCheckPlayerInputForAlreadyFoundWord() {
+        grid.setWordsForMatrix();
+
+        // Test correct input
+        int expectedScore = 5;
+        assertEquals(expectedScore, grid.checkPlayerInput("WORD1"));
+
+        // Test input already found
+        expectedScore = 0;
+        assertEquals(expectedScore, grid.checkPlayerInput("WORD1"));
+    }
+
+    @Test
     public void testCheckPlayerInputWithInvalidInput() {
         //given
         grid.setRows(EXPECTED_ROWS);

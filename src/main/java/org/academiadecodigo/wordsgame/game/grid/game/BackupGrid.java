@@ -1,7 +1,5 @@
 package org.academiadecodigo.wordsgame.game.grid.game;
 
-import org.jetbrains.annotations.Contract;
-
 /**
  * This class is for Backup Purpose only
  * If the outside file is corrupted or something
@@ -62,7 +60,6 @@ public class BackupGrid {
                 x.append(" ");
             }
         }
-
         return x.toString();
     }
 }

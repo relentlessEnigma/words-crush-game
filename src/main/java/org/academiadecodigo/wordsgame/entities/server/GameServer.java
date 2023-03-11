@@ -14,9 +14,9 @@ import java.util.concurrent.*;
 public class GameServer {
 
     public static Integer MAX_CLIENTS;
-    private final ExecutorService executor;
-    private final ExecutorCompletionService<Void> executorCompletionService;
-    private final ServerSocket serverSocket;
+    private ExecutorService executor;
+    private ExecutorCompletionService<Void> executorCompletionService;
+    private ServerSocket serverSocket;
     private final String filePath;
     private int nThreads;
     private Database db;
@@ -55,5 +55,41 @@ public class GameServer {
     public void close() throws IOException {
         serverSocket.close();
         executor.shutdownNow();
+    }
+
+    public void setServerSocket(ServerSocket socket) {
+        this.serverSocket = socket;
+    }
+
+    public void setExecutorCompletionService(ExecutorCompletionService<Void> executorCompletionService) {
+        this.executorCompletionService = executorCompletionService;
+    }
+
+    public ExecutorService getExecutor() {
+        return executor;
+    }
+
+    public ExecutorCompletionService<Void> getExecutorCompletionService() {
+        return executorCompletionService;
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public static Integer getMaxClients() {
+        return MAX_CLIENTS;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public int getnThreads() {
+        return nThreads;
+    }
+
+    public Database getDb() {
+        return db;
     }
 }

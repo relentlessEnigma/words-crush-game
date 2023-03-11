@@ -39,7 +39,7 @@ public class ClientDispatch implements Runnable {
     private Socket socket;
     private PrintWriter outStream;
 
-    public ClientDispatch(@NotNull Socket socket, String filePath) {
+    public ClientDispatch(Socket socket, String filePath) {
         this.socket = socket;
         this.properties = ProjectProperties.getInstance();
 
