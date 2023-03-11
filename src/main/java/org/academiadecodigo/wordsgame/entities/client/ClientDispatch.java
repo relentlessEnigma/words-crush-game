@@ -15,7 +15,7 @@ import org.academiadecodigo.wordsgame.game.grid.game.Grid;
 import org.academiadecodigo.wordsgame.game.stages.Stage;
 import org.academiadecodigo.wordsgame.game.stages.WaitingRoom;
 import org.academiadecodigo.wordsgame.misc.Colors;
-import org.academiadecodigo.wordsgame.misc.Database;
+import org.academiadecodigo.wordsgame.repository.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
 import org.jetbrains.annotations.NotNull;
 import java.io.*;

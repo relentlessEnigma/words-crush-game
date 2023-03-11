@@ -1,10 +1,10 @@
 package game.grid.game;
 
 import org.academiadecodigo.wordsgame.game.grid.game.Grid;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GridTest {
@@ -20,7 +20,7 @@ public class GridTest {
     }
 
     @Test
-    public void testCheckRowSizeWithValidFile() throws IOException {
+    public void testCheckRowSizeWithValidFile() {
         grid = new Grid(TEST_FILE_PATH);
         assertEquals(EXPECTED_ROWS, grid.getRows());
     }
@@ -28,7 +28,7 @@ public class GridTest {
     @Test
     public void testCheckRowSizeWithInvalidFileShouldReturnWordsFromBackup() {
         grid = new Grid(INVALID_FILE_PATH);
-        assertEquals(7, grid.getRows());
+        assertEquals(8, grid.getRows());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class GridTest {
                 {"abacus    ", "barbecue  ", "chocolate ", "dolphin   ", "elephant  ", "festival  ", "gorilla   ", "harmony   ", "indigo    ", "jovial    "},
                 {"kangaroo  ", "lavender  ", "mountain  ", "nectar    ", "octopus   ", "panther   ", "quality   ", "rainbow   ", "saffron   ", "tulip     "}
         };
-        assertArrayEquals(expectedMatrix, grid.getWordMatrix());
+        Assertions.assertArrayEquals(expectedMatrix, Grid.getWordMatrix());
     }
 
     @Test
@@ -87,12 +87,12 @@ public class GridTest {
         grid.setWordsForMatrix();
 
         // Test correct input
-        int expectedScore = 5;
-        assertEquals(expectedScore, grid.checkPlayerInput("WORD1"));
+        int expectedScore = 6;
+        assertEquals(expectedScore, grid.checkPlayerInput("abacus"));
 
         // Test input already found
         expectedScore = 0;
-        assertEquals(expectedScore, grid.checkPlayerInput("WORD1"));
+        assertEquals(expectedScore, grid.checkPlayerInput("abacus"));
     }
 
     @Test

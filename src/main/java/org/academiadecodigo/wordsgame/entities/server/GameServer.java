@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
-import org.academiadecodigo.wordsgame.misc.Database;
+import org.academiadecodigo.wordsgame.repository.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -36,8 +36,6 @@ public class GameServer {
 
         ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_SERVER_ON"));
         ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_PORT") + portNumber);
-
-        db.setupDbTable();
     }
 
     public void manageNewConnections() {
@@ -56,19 +54,8 @@ public class GameServer {
     }
 
     public void close() throws IOException {
+        System.out.println("Closing server socket...");
         serverSocket.close();
         executor.shutdownNow();
-    }
-
-    public void setServerSocket(ServerSocket socket) {
-        this.serverSocket = socket;
-    }
-
-    public void setExecutorCompletionService(ExecutorCompletionService<Void> executorCompletionService) {
-        this.executorCompletionService = executorCompletionService;
-    }
-
-    public ExecutorCompletionService<Void> getExecutorCompletionService() {
-        return executorCompletionService;
     }
 }

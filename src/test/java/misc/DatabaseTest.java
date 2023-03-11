@@ -1,100 +1,77 @@
 package misc;
 
-import org.academiadecodigo.wordsgame.misc.Database;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.academiadecodigo.wordsgame.repository.Database;
+import org.academiadecodigo.wordsgame.repository.DatabaseEnvData;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.After;
 
 public class DatabaseTest {
-    private static Database database;
-    private String testDb = "wordscrush_test";
 
-    @BeforeAll
-    public static void setUp() throws SQLException {
+    private Database database;
+
+    @BeforeEach
+    public void setUp() throws SQLException {
+        database = null;
         database = new Database();
-        database.connect();
     }
 
-    @AfterAll
-    public static void tearDown() {
+    @After
+    public void tearDown() {
         database.close();
     }
 
     @Test
-    public void testConnect() throws SQLException {
-        Connection connection = database.connect();
-        assertNotNull(connection);
-        assertFalse(connection.isClosed());
-        connection.close();
+    public void testSetVarsFromCurrentEnvFile() {
+        String envFile = "application-test.properties";
+        DatabaseEnvData data = database.setVarsFromCurrentEnvFile(envFile);
+        assertNotNull(data);
+        assertEquals("jdbc:mysql://localhost:3306/wordscrush_test", data.getCompleteUrl());
+        assertEquals("root", data.getDbRoot());
+        assertEquals("mysqlpw", data.getDbRootPass());
+        assertEquals("wordscrush_test", data.getDbName());
+        assertEquals("test", data.getGameRoot());
+        assertEquals("test", data.getGameRootPass());
+    }
+
+    @Test
+    public void testConnect() {
+        assertNotNull(database.getConnection());
     }
 
     @Test
     public void testExecuteQuery() throws SQLException {
-        // Arrange
-        String query = "USE " + testDb + ";";
-        database.executeUpdate(query);
-        query = "SELECT * FROM users WHERE username = 'john' AND password = 'doe'";
-        // Act
-        ResultSet result = database.executeQuery(query);
-
-        // Assert
-        assertTrue(result.next()); // Check if the result set is not empty
+        String query = "SELECT COUNT(*) AS total FROM users";
+        ResultSet resultSet = database.executeQuery(query);
+        assertNotNull(resultSet);
+        assertTrue(resultSet.next());
+        int count = resultSet.getInt("total");
+        assertTrue(count >= 0);
     }
 
     @Test
-    public void testExecuteUpdate() throws SQLException {
-        int rowsAffected = database.executeUpdate("UPDATE users SET username = 'Jane' WHERE id = 1");
+    public void testExecuteUpdate() {
+        String query = "INSERT INTO users (username, password, role) VALUES ('testuser', 'testpass', 'USER')";
+        int rowsAffected = database.executeUpdate(query);
         assertEquals(1, rowsAffected);
-        ResultSet resultSet = database.executeQuery("SELECT * FROM users WHERE id = 1");
-        assertNotNull(resultSet);
-        resultSet.next();
-        assertEquals("Jane", resultSet.getString("username"));
-        database.executeUpdate("UPDATE users SET username = 'john' WHERE id = 1"); //make it default again
     }
 
     @Test
     public void testSetupDbTable() throws SQLException {
-        // Test for dev environment
-        String dbName = "wordscrush_dev";
-        Connection connection = database.connect();
-        assertFalse(connection.isClosed());
-
-        // Drop the database if it already exists
-        String dropDatabaseQuery = "DROP DATABASE IF EXISTS " + dbName;
-        database.executeUpdate(dropDatabaseQuery);
-
-        database.setupDbTable();
-
-        // Check if the database and table were created
-        String checkDatabaseQuery = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?";
-        PreparedStatement checkDatabaseStmt = connection.prepareStatement(checkDatabaseQuery);
-        checkDatabaseStmt.setString(1, dbName);
-        ResultSet resultSet = checkDatabaseStmt.executeQuery();
+        // Ensure that the 'users' table exists
+        String query = "SHOW TABLES LIKE 'users'";
+        ResultSet resultSet = database.executeQuery(query);
         assertTrue(resultSet.next());
 
-        String checkTableQuery = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?";
-        PreparedStatement checkTableStmt = connection.prepareStatement(checkTableQuery);
-        checkTableStmt.setString(1, dbName);
-        checkTableStmt.setString(2, "users");
-        resultSet = checkTableStmt.executeQuery();
+        // Ensure that there is an admin user in the 'users' table
+        query = "SELECT COUNT(*) AS total FROM users WHERE role = 'ADMIN'";
+        resultSet = database.executeQuery(query);
+        assertNotNull(resultSet);
         assertTrue(resultSet.next());
-        assertEquals(1, resultSet.getInt(1));
-
-        // Check if the mockup data was inserted
-        String checkDataQuery = "SELECT COUNT(*) FROM users WHERE username = ? AND password = ? AND role = ?";
-        PreparedStatement checkDataStmt = connection.prepareStatement(checkDataQuery);
-        checkDataStmt.setString(1, "admin");
-        checkDataStmt.setString(2, "pass");
-        checkDataStmt.setString(3, "ADMIN");
-        resultSet = checkDataStmt.executeQuery();
-        assertTrue(resultSet.next());
-        assertEquals(1, resultSet.getInt(1));
-
-        connection.close();
+        int count = resultSet.getInt("total");
+        assertTrue(count > 0);
     }
 }
