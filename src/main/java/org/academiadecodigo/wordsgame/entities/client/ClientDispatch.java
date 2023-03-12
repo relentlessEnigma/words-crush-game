@@ -15,7 +15,7 @@ import org.academiadecodigo.wordsgame.game.grid.game.Grid;
 import org.academiadecodigo.wordsgame.game.stages.Stage;
 import org.academiadecodigo.wordsgame.game.stages.WaitingRoom;
 import org.academiadecodigo.wordsgame.misc.Colors;
-import org.academiadecodigo.wordsgame.repository.Database;
+import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
 import org.jetbrains.annotations.NotNull;
 import java.io.*;
@@ -72,7 +72,7 @@ public class ClientDispatch implements Runnable {
 
 
         if( isUserAdmin(userName, password) ) {
-            System.out.println("We got an andim!!!!");
+            System.out.println("We got an admin!!!!");
             setUserRole(Roles.ADMIN, userName);
         }
 
@@ -113,8 +113,8 @@ public class ClientDispatch implements Runnable {
         Database db = null;
         try {
             // get the connection to the database
-            db = new Database();
-            db.connect();
+            db = Database.getInstance();
+            db.startDb();
 
             // prepare the SQL statement to retrieve user info by username and password
             String query = "SELECT * FROM users WHERE username = ? AND password = ?";

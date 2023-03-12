@@ -1,22 +1,24 @@
 package misc;
 
-import org.academiadecodigo.wordsgame.repository.Database;
-import org.academiadecodigo.wordsgame.repository.DatabaseEnvData;
+import static org.junit.jupiter.api.Assertions.*;
+import org.academiadecodigo.wordsgame.database.Database;
+import org.academiadecodigo.wordsgame.database.DatabaseEnvData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.After;
 
 public class DatabaseTest {
 
     private Database database;
+    private final String ENV_TEST = "test";
 
     @BeforeEach
     public void setUp() throws SQLException {
-        database = null;
-        database = new Database();
+        database = Database.getInstance();
+        database.setEnv(ENV_TEST);
+        database.startDb();
     }
 
     @After

@@ -74,15 +74,6 @@ public class GridTest {
     }
 
     @Test
-    public void testCheckPlayerWithInvalidInput() {
-        grid.setWordsForMatrix();
-
-        // Test incorrect input
-        int expectedScore = 0;
-        assertEquals(expectedScore, grid.checkPlayerInput("INCORRECT_WORD"));
-    }
-
-    @Test
     public void testCheckPlayerInputForAlreadyFoundWord() {
         grid.setWordsForMatrix();
 

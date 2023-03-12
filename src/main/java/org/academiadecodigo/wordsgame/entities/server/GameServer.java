@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
-import org.academiadecodigo.wordsgame.repository.Database;
+import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,7 +25,7 @@ public class GameServer {
     private Database db;
 
     public GameServer(int portNumber, int nThreads, String filePath) throws IOException, SQLException {
-        this.db = new Database();
+        this.db = Database.getInstance();
         this.nThreads = nThreads;
         this.filePath = filePath;
         MAX_CLIENTS = nThreads;
@@ -33,6 +33,8 @@ public class GameServer {
         executor = Executors.newFixedThreadPool(nThreads);
         executorCompletionService = new ExecutorCompletionService<>(executor);
         serverSocket = new ServerSocket(portNumber);
+
+        this.db.startDb();
 
         ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_SERVER_ON"));
         ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_PORT") + portNumber);

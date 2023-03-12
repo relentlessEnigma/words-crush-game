@@ -1,4 +1,4 @@
-package org.academiadecodigo.wordsgame.repository;
+package org.academiadecodigo.wordsgame.database;
 
 import lombok.Getter;
 import lombok.Setter;

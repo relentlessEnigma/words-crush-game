@@ -2,7 +2,6 @@ package org.academiadecodigo.wordsgame.entities.users;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
