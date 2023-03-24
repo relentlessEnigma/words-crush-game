@@ -171,6 +171,13 @@ public class Database {
         }
     }
 
+    public void dropTable() throws SQLException {
+        Statement queryStatement = connection.createStatement();
+        queryStatement.executeUpdate(
+                "DROP DATABASE IF EXISTS " + dataBaseData.dbName + ";"
+        );
+    }
+
     /**
      * Closes the database connection.
      */
