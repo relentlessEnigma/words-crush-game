@@ -2,11 +2,15 @@ package org.academiadecodigo.wordsgame.database;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.academiadecodigo.wordsgame.entities.users.Roles;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -128,11 +132,19 @@ public class Database {
                 "id INT NOT NULL AUTO_INCREMENT, " +
                 "username VARCHAR(50) NOT NULL, " +
                 "password VARCHAR(50) NOT NULL, " +
-                "role ENUM('USER','ADMIN') NOT NULL DEFAULT 'USER', " +
+                "role ENUM(" + Arrays.stream(Roles.values())
+                .map(role -> "'" + role.name() + "'")
+                .collect(Collectors.joining(","))
+                + ") NOT NULL DEFAULT 'PLAYER', " +
+                "score INT NOT NULL DEFAULT 0, " +
+                "lives INT NOT NULL DEFAULT 3, " +
+                "played_games INT NOT NULL DEFAULT 0, " +
+                "wins INT NOT NULL DEFAULT 0, " +
+                "losses INT NOT NULL DEFAULT 0, " +
                 "PRIMARY KEY (id)" +
                 ")";
         executeUpdate(query);
-        query = String.format("INSERT INTO users (username, password, role) VALUES ('%s', '%s', 'ADMIN');",
+        query = String.format("INSERT INTO users (username, password, role) VALUES ('%s', '%s', 'ROOT');",
                 dataBaseData.gameRoot, dataBaseData.gameRootPass);
         executeUpdate(query);
     }
