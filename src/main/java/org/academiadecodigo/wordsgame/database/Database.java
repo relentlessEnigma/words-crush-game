@@ -3,7 +3,6 @@ package org.academiadecodigo.wordsgame.database;
 import lombok.Getter;
 import lombok.Setter;
 import org.academiadecodigo.wordsgame.entities.users.Roles;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
@@ -20,7 +19,6 @@ public class Database {
     private Properties props;
     private Connection connection;
     private String env;
-    private String env_file;
     private DatabaseEnvData dataBaseData;
 
     private Database() throws SQLException {
@@ -48,21 +46,13 @@ public class Database {
     }
 
     /**
-     * Delets current instance of DataBase
-     */
-    public void closeInstance() {
-        close();
-        instance = null;
-    }
-
-    /**
      * Starts the database connection using the current environment file.
      *
      * @throws SQLException if an error occurs while connecting to the database
      */
-    public void startDb() throws SQLException {
+    public Connection startDb() {
         dataBaseData = setVarsFromCurrentEnvFile("application-" + env + ".properties");
-        connect();
+        return connect();
     }
 
     /**
@@ -89,30 +79,9 @@ public class Database {
                 props.getProperty("db.username"),
                 props.getProperty("db.password"),
                 props.getProperty("db.name"),
-                props.getProperty("db.gameAdmin"),
-                props.getProperty("db.gameAdminPass")
+                props.getProperty("db.inGameRoot"),
+                props.getProperty("db.inGameRootPass")
         );
-    }
-
-    /**
-     * Connects to the database using the connection information stored in the
-     * `dataBaseData` field.
-     *
-     * @return the database connection object
-     * @throws SQLException if an error occurs while connecting to the database
-     */
-    private Connection connect() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            try {
-                connection = DriverManager
-                        .getConnection(dataBaseData.completeUrl, dataBaseData.dbRoot, dataBaseData.dbRootPass);
-            } catch (SQLException e) {
-                connection = DriverManager
-                        .getConnection(dataBaseData.url, dataBaseData.dbRoot, dataBaseData.dbRootPass);
-                setupDbTable();
-            }
-        }
-        return connection;
     }
 
     /**
@@ -147,6 +116,31 @@ public class Database {
         query = String.format("INSERT INTO users (username, password, role) VALUES ('%s', '%s', 'ROOT');",
                 dataBaseData.gameRoot, dataBaseData.gameRootPass);
         executeUpdate(query);
+    }
+
+    /**
+     * Connects to the database using the connection information stored in the
+     * `dataBaseData` field.
+     *
+     * @return the database connection object
+     * @throws SQLException if an error occurs while connecting to the database
+     */
+    private Connection connect() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                try {
+                    connection = DriverManager
+                            .getConnection(dataBaseData.completeUrl, dataBaseData.dbRoot, dataBaseData.dbRootPass);
+                } catch (SQLException e) {
+                    connection = DriverManager
+                            .getConnection(dataBaseData.url, dataBaseData.dbRoot, dataBaseData.dbRootPass);
+                    setupDbTable();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return connection;
     }
 
     /**
@@ -193,12 +187,20 @@ public class Database {
     /**
      * Closes the database connection.
      */
-    public void close() {
+    private void close() {
         try {
             connection.close();
         } catch (SQLException e) {
             System.out.println("Unable to close database connection.");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Delets current instance of DataBase
+     */
+    public void closeInstance() {
+        close();
+        instance = null;
     }
 }

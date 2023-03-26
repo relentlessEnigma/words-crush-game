@@ -2,7 +2,6 @@ package org.academiadecodigo.wordsgame.repository;
 
 import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.entities.users.Roles;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,9 +10,9 @@ public class UserAuthenticator {
 
     static Database db;
 
-    UserAuthenticator(){
+    static {
         try {
-            this.db = Database.getInstance();
+            db = Database.getInstance();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

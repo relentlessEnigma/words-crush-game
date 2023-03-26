@@ -125,7 +125,7 @@ public class UserFactory {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            db.closeInstance();
         }
 
         return false;

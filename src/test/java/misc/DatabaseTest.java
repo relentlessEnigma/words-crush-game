@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.database.DatabaseEnvData;
 import org.junit.jupiter.api.*;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -62,7 +61,7 @@ public class DatabaseTest {
     @Test
     @Order(4)
     public void testExecuteUpdate() {
-        String query = "INSERT INTO users (username, password, role) VALUES ('testuser', 'testpass', 'USER')";
+        String query = "INSERT INTO users (username, password, role) VALUES ('testuser', 'testpass', 'PLAYER')";
         int rowsAffected = database.executeUpdate(query);
         assertEquals(1, rowsAffected);
     }
