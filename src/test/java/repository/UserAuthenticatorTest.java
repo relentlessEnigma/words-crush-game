@@ -6,6 +6,8 @@ import org.academiadecodigo.wordsgame.entities.users.Roles;
 import org.academiadecodigo.wordsgame.repository.UserAuthenticator;
 import org.junit.jupiter.api.*;
 import java.sql.SQLException;
+import java.util.Objects;
+
 import static org.junit.Assert.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -33,7 +35,7 @@ public class UserAuthenticatorTest {
 
     @Test
     public void testAuthenticateRoot() {
-        boolean result = UserAuthenticator.authenticateRoot(dataBaseData.getGameRoot(), dataBaseData.getGameRootPass());
+        boolean result = UserAuthenticator.authenticateRoot(dataBaseData.getInGameRootUser(), dataBaseData.getInGameRootPass());
         assertTrue(result);
     }
 
@@ -42,13 +44,13 @@ public class UserAuthenticatorTest {
         // Test the register() method
         String mockAdmin = "mock_Admin";
         UserAuthenticator.register(Roles.ADMIN, mockAdmin, "mock_password");
-        assertEquals("ADMIN", UserAuthenticator.getUserRole(mockAdmin));
+        assertEquals("ADMIN", Objects.requireNonNull(UserAuthenticator.getUserRole(mockAdmin)).toString());
     }
 
     @Test
     public void testRegisterAdmin() {
         // Authenticate as ROOT user
-        boolean authenticated = UserAuthenticator.authenticateRoot(dataBaseData.getGameRoot(), dataBaseData.getGameRootPass());
+        boolean authenticated = UserAuthenticator.authenticateRoot(dataBaseData.getInGameRootUser(), dataBaseData.getInGameRootPass());
         assertTrue("Failed to authenticate as ROOT user", authenticated);
 
         // If authenticated, register new admin user
@@ -60,8 +62,8 @@ public class UserAuthenticatorTest {
             assertTrue("Failed to log in as new admin user", loggedIn);
 
             // Confirm that the new admin user has the ADMIN role
-            String role = UserAuthenticator.getUserRole("newadmin");
-            assertEquals("New admin user does not have the ADMIN role", Roles.ADMIN.name(), role);
+            Roles role = UserAuthenticator.getUserRole("newadmin");
+            assertEquals("New admin user does not have the ADMIN role", Roles.ADMIN, role);
         }
     }
 
@@ -75,7 +77,7 @@ public class UserAuthenticatorTest {
     @Test
     public void testGetUserRole() {
         // Test the getUserRole() method
-        assertEquals("ROOT", UserAuthenticator.getUserRole(dataBaseData.getGameRoot()));
+        assertEquals(Roles.ROOT, UserAuthenticator.getUserRole(dataBaseData.getInGameRootUser()));
         assertNull(UserAuthenticator.getUserRole("nonexistentuser"));
     }
 

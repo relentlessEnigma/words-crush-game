@@ -22,6 +22,7 @@ public class UserAuthenticator {
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
         PreparedStatement pstmt;
         try {
+            db = Database.getInstance();
             pstmt = db.getConnection().prepareStatement(query);
 
             pstmt.setString(1, user);
@@ -60,7 +61,7 @@ public class UserAuthenticator {
         }
     }
 
-    public static String getUserRole(String userName) {
+    public static Roles getUserRole(String userName) {
         String query = "SELECT role FROM users WHERE username = ?";
         PreparedStatement statement;
         try {
@@ -71,7 +72,8 @@ public class UserAuthenticator {
 
             if (resultSet.next()) {
                 // User exists in the database
-                return resultSet.getString("role");
+                String roleStr = resultSet.getString("role");
+                return Roles.valueOf(roleStr.toUpperCase());
             } else {
                 // User does not exist in the database
                 return null;

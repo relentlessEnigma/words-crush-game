@@ -11,16 +11,16 @@ public class DatabaseEnvData {
     String dbRoot;
     String dbRootPass;
     String dbName;
-    String gameRoot;
-    String gameRootPass;
+    String inGameRootUser;
+    String inGameRootPass;
 
-    public DatabaseEnvData(String completeUrl, String url, String dbRoot, String dbRootPass, String dbName, String gameRoot, String gameRootPass) {
+    public DatabaseEnvData(String completeUrl, String url, String dbRoot, String dbRootPass, String dbName, String inGameRootUser, String inGameRootPass) {
         this.completeUrl = completeUrl;
         this.url = url;
         this.dbRoot = dbRoot;
         this.dbRootPass = dbRootPass;
         this.dbName = dbName;
-        this.gameRoot = gameRoot;
-        this.gameRootPass = gameRootPass;
+        this.inGameRootUser = inGameRootUser;
+        this.inGameRootPass = inGameRootPass;
     }
 }

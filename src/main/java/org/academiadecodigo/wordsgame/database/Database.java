@@ -21,7 +21,7 @@ public class Database {
     private String env;
     private DatabaseEnvData dataBaseData;
 
-    private Database() throws SQLException {
+    private Database() {
         this.props = new Properties();
         env = ResourceBundle.getBundle("application").getString("env");
     }
@@ -79,7 +79,7 @@ public class Database {
                 props.getProperty("db.username"),
                 props.getProperty("db.password"),
                 props.getProperty("db.name"),
-                props.getProperty("db.inGameRoot"),
+                props.getProperty("db.inGameRootUser"),
                 props.getProperty("db.inGameRootPass")
         );
     }
@@ -114,7 +114,7 @@ public class Database {
                 ")";
         executeUpdate(query);
         query = String.format("INSERT INTO users (username, password, role) VALUES ('%s', '%s', 'ROOT');",
-                dataBaseData.gameRoot, dataBaseData.gameRootPass);
+                dataBaseData.inGameRootUser, dataBaseData.inGameRootPass);
         executeUpdate(query);
     }
 

@@ -26,27 +26,13 @@ public class UserManager {
     public void register() {
         Integer accountType = promptMenuInt.createNewMenu(new String[]{"Admin", "Player"}, "Select an account type to create:", prompt);
 
-        System.out.println(accountType);
-        if(accountType == 1) {
-            String userName = promptMenuString.createNewQuestion("Login with root privileges first.\nRootName: ", prompt);
-            String password = promptMenuString.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
-
-            if(isRoot(userName, password)) {
-                userName = promptMenuString.createNewQuestion("Set Admin Name: ", prompt);
-                password = promptMenuString.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
-
-                UserAuthenticator.register(Roles.ADMIN, userName, password);
-                outStream.println("A new Admin Account was configured");
-                return;
+        switch (accountType) {
+            case 1 -> adminRegistration();
+            case 2 -> playerRegistration();
+            default -> {
             }
-            outStream.println("ROOT details wrong. Proceed with a normal account");
         }
-
-        String userName = promptMenuString.createNewQuestion(Messages.get("INFO_SET_NICKNAME"), prompt);
-        String password = promptMenuString.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
-        UserAuthenticator.register(Roles.PLAYER, userName, password);
     }
-
 
     public void login() {
         outStream.println("Login with your details:");
@@ -61,20 +47,40 @@ public class UserManager {
             outStream.println("No User Found with this details");
             System.exit(0); //TODO change this!!! this is closing the app!!
         }
-
-    }
-
-
-    private boolean isRoot(String user, String pass) {
-        return UserAuthenticator.authenticateRoot(user, pass);
     }
 
     public Roles getUserRole() {
-        this.userRole = Roles.valueOf(UserAuthenticator.getUserRole(userName));
+        this.userRole = UserAuthenticator.getUserRole(userName);
         return this.userRole;
     }
 
     public String getUserName() {
         return this.userName;
+    }
+
+    private void adminRegistration() {
+        String userName = promptMenuString.createNewQuestion("Login with root privileges first.\nRootName: ", prompt);
+        String password = promptMenuString.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
+
+        if(isRoot(userName, password)) {
+            userName = promptMenuString.createNewQuestion("Set Admin Name: ", prompt);
+            password = promptMenuString.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
+
+            UserAuthenticator.register(Roles.ADMIN, userName, password);
+            outStream.println("A new Admin Account was configured");
+            return;
+        }
+        outStream.println("ROOT details wrong. Proceed with a normal account");
+        outStream.flush();
+    }
+
+    private void playerRegistration() {
+        String userName = promptMenuString.createNewQuestion(Messages.get("INFO_SET_NICKNAME"), prompt);
+        String password = promptMenuString.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
+        UserAuthenticator.register(Roles.PLAYER, userName, password);
+    }
+
+    private boolean isRoot(String user, String pass) {
+        return UserAuthenticator.authenticateRoot(user, pass);
     }
 }

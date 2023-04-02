@@ -37,8 +37,8 @@ public class DatabaseTest {
         assertEquals("root", data.getDbRoot());
         assertEquals("1010", data.getDbRootPass());
         assertEquals("wordscrush_test", data.getDbName());
-        assertEquals("sprint", data.getGameRoot());
-        assertEquals("pass", data.getGameRootPass());
+        assertEquals("sprint", data.getInGameRootUser());
+        assertEquals("pass", data.getInGameRootPass());
     }
 
     @Test
