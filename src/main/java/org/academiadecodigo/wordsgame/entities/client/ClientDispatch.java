@@ -75,10 +75,10 @@ public class ClientDispatch implements Runnable {
      * @param role
      * @param userName
      */
-    private void setUserRole(Roles role, String userName) {
+    private void setUserRole(Role role, String userName) {
         User user = null;
-        if (role == Roles.ADMIN || role == Roles.ROOT) user = setupNewAdminAccount();
-        if (role == Roles.PLAYER) user = setupNewPlayerAccount(userName);
+        if (role == Role.ADMIN || role == Role.ROOT) user = setupNewAdminAccount();
+        if (role == Role.PLAYER) user = setupNewPlayerAccount(userName);
 
         registerInWaitingRoom(user);
         registerInChatManagerClass(user);

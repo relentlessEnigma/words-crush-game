@@ -3,7 +3,7 @@ package entities.users;
 import org.academiadecodigo.bootcamp.InputScanner;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.wordsgame.database.Database;
-import org.academiadecodigo.wordsgame.entities.users.Roles;
+import org.academiadecodigo.wordsgame.entities.users.Role;
 import org.academiadecodigo.wordsgame.entities.users.UserManager;
 import org.academiadecodigo.wordsgame.game.PromptMenu;
 import org.academiadecodigo.wordsgame.misc.Messages;
@@ -24,17 +24,14 @@ public class UserManagerTest {
 
     private Database database;
     private final String ENV_TEST = "test";
+    private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private final PrintWriter printWriter = new PrintWriter(out, true);
 
     @Mock
     private Prompt mockPrompt;
 
     @Mock
     private PromptMenu mockPromptMenu;
-
-    public final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    public final PrintWriter printWriter = new PrintWriter(out, true);
-
-
 
     @BeforeAll
     public void setUp() throws SQLException {
@@ -45,6 +42,11 @@ public class UserManagerTest {
 
     @BeforeEach
     public void setUpEach() {
+        try {
+            setUp();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         out.reset();
         MockitoAnnotations.openMocks(this);
     }
@@ -56,6 +58,7 @@ public class UserManagerTest {
 
 
     @Test
+    @Order(1)
     void registerNewAdminTest() {
         // given
         String inGameRootUser = database.getDataBaseData().getInGameRootUser();
@@ -76,11 +79,12 @@ public class UserManagerTest {
 
         // then
         String expected = "A new Admin Account was configured" + System.lineSeparator();
-        assertEquals(Roles.ADMIN, UserAuthenticator.getUserRole("admin"));
+        assertEquals(Role.ADMIN, UserAuthenticator.getUserRole("admin"));
         assertEquals(expected, out.toString());
     }
 
     @Test
+    @Order(2)
     void registerNewPlayerTest() {
         // given
         when(mockPrompt.getUserInput(any(InputScanner.class))).thenReturn(2, "player1", "player1234");
@@ -94,10 +98,11 @@ public class UserManagerTest {
         userManager.register();
 
         // then
-        assertEquals(Roles.PLAYER, UserAuthenticator.getUserRole("player1"));
+        assertEquals(Role.PLAYER, UserAuthenticator.getUserRole("player1"));
     }
 
     @Test
+    @Order(3)
     void loginTest() {
         // given
         when(mockPrompt.getUserInput(any(InputScanner.class))).thenReturn("player1", "player1234");

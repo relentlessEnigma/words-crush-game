@@ -63,14 +63,14 @@ public class UserFactory {
         String password = promptMenu.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
 
         if( isUserAdmin(userName, password) ) {
-            setUserRole(Roles.ADMIN, userName);
+            setUserRole(Role.ADMIN, userName);
         }
 
         if(userName.equals(properties.getProperty("admin.name"))) {
             setupUser();
         }
 
-        return setUserRole(Roles.PLAYER, userName);
+        return setUserRole(Role.PLAYER, userName);
     }
 
     /**
@@ -78,11 +78,11 @@ public class UserFactory {
      * @param role
      * @param userName
      */
-    private User setUserRole(Roles role, String userName) {
+    private User setUserRole(Role role, String userName) {
 
         User user = null;
-        if (role == Roles.ADMIN) user = setupNewAdminAccount();
-        if (role == Roles.PLAYER) user = setupNewPlayerAccount(userName);
+        if (role == Role.ADMIN) user = setupNewAdminAccount();
+        if (role == Role.PLAYER) user = setupNewPlayerAccount(userName);
 
         registerInWaitingRoom(user);
         registerInChatManagerClass(user);

@@ -2,7 +2,7 @@ package org.academiadecodigo.wordsgame.database;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.academiadecodigo.wordsgame.entities.users.Roles;
+import org.academiadecodigo.wordsgame.entities.users.Role;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
@@ -101,7 +101,7 @@ public class Database {
                 "id INT NOT NULL AUTO_INCREMENT, " +
                 "username VARCHAR(50) NOT NULL, " +
                 "password VARCHAR(50) NOT NULL, " +
-                "role ENUM(" + Arrays.stream(Roles.values())
+                "role ENUM(" + Arrays.stream(Role.values())
                 .map(role -> "'" + role.name() + "'")
                 .collect(Collectors.joining(","))
                 + ") NOT NULL DEFAULT 'PLAYER', " +
@@ -113,8 +113,8 @@ public class Database {
                 "PRIMARY KEY (id)" +
                 ")";
         executeUpdate(query);
-        query = String.format("INSERT INTO users (username, password, role) VALUES ('%s', '%s', 'ROOT');",
-                dataBaseData.inGameRootUser, dataBaseData.inGameRootPass);
+        query = String.format("INSERT INTO users (username, password, role) VALUES ('%s', '%s', '%s');",
+                dataBaseData.inGameRootUser, dataBaseData.inGameRootPass, Role.ROOT);
         executeUpdate(query);
     }
 
@@ -129,9 +129,11 @@ public class Database {
         try {
             if (connection == null || connection.isClosed()) {
                 try {
+                    //If already exists
                     connection = DriverManager
                             .getConnection(dataBaseData.completeUrl, dataBaseData.dbRoot, dataBaseData.dbRootPass);
                 } catch (SQLException e) {
+                    //If does not already exists
                     connection = DriverManager
                             .getConnection(dataBaseData.url, dataBaseData.dbRoot, dataBaseData.dbRootPass);
                     setupDbTable();

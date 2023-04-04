@@ -1,7 +1,7 @@
 package org.academiadecodigo.wordsgame.repository;
 
 import org.academiadecodigo.wordsgame.database.Database;
-import org.academiadecodigo.wordsgame.entities.users.Roles;
+import org.academiadecodigo.wordsgame.entities.users.Role;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +39,7 @@ public class UserAuthenticator {
         return false;
     }
 
-    public static void register(Roles role, String userName, String password) {
+    public static void register(Role role, String userName, String password) {
         String query = "INSERT INTO users (username, password, role) VALUES ('"+ userName + "', '"+ password + "', '"+ role +"')";
         db.executeUpdate(query);
     }
@@ -61,7 +61,7 @@ public class UserAuthenticator {
         }
     }
 
-    public static Roles getUserRole(String userName) {
+    public static Role getUserRole(String userName) {
         String query = "SELECT role FROM users WHERE username = ?";
         PreparedStatement statement;
         try {
@@ -73,7 +73,7 @@ public class UserAuthenticator {
             if (resultSet.next()) {
                 // User exists in the database
                 String roleStr = resultSet.getString("role");
-                return Roles.valueOf(roleStr.toUpperCase());
+                return Role.valueOf(roleStr.toUpperCase());
             } else {
                 // User does not exist in the database
                 return null;

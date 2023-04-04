@@ -14,7 +14,7 @@ public class UserManager {
     PromptMenu<Integer> promptMenuInt;
     Prompt prompt;
     private String userName;
-    private Roles userRole;
+    private Role userRole;
 
     public UserManager(PrintWriter outStream, Prompt prompt) {
         this.outStream = outStream;
@@ -44,12 +44,13 @@ public class UserManager {
             this.userName = userName;
             //TODO: Show a dashboard with all the user data here
         } else {
-            outStream.println("No User Found with this details");
-            System.exit(0); //TODO change this!!! this is closing the app!!
+            outStream.println("No User Found with this details. Bye");
+            outStream.close();
+            //TODO Should close the client
         }
     }
 
-    public Roles getUserRole() {
+    public Role getUserRole() {
         this.userRole = UserAuthenticator.getUserRole(userName);
         return this.userRole;
     }
@@ -66,18 +67,19 @@ public class UserManager {
             userName = promptMenuString.createNewQuestion("Set Admin Name: ", prompt);
             password = promptMenuString.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
 
-            UserAuthenticator.register(Roles.ADMIN, userName, password);
+            UserAuthenticator.register(Role.ADMIN, userName, password);
             outStream.println("A new Admin Account was configured");
             return;
         }
         outStream.println("ROOT details wrong. Proceed with a normal account");
         outStream.flush();
+        this.playerRegistration();
     }
 
     private void playerRegistration() {
         String userName = promptMenuString.createNewQuestion(Messages.get("INFO_SET_NICKNAME"), prompt);
         String password = promptMenuString.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
-        UserAuthenticator.register(Roles.PLAYER, userName, password);
+        UserAuthenticator.register(Role.PLAYER, userName, password);
     }
 
     private boolean isRoot(String user, String pass) {

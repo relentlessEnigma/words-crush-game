@@ -1,6 +1,6 @@
 package org.academiadecodigo.wordsgame.entities.users;
 
-public enum Roles {
+public enum Role {
     ROOT,
     ADMIN,
     PLAYER
