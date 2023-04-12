@@ -28,11 +28,6 @@ public class UserAuthenticatorTest {
         dataBaseData = database.getDataBaseData();
     }
 
-    @AfterAll
-    public void closeConnection() {
-        database.closeInstance();
-    }
-
     @Test
     public void testAuthenticateRoot() {
         boolean result = UserAuthenticator.authenticateRoot(dataBaseData.getInGameRootUser(), dataBaseData.getInGameRootPass());

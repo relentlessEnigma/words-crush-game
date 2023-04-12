@@ -69,13 +69,17 @@ public class DatabaseTest {
     @Test
     @Order(5)
     public void testSetupDbTable() throws SQLException {
+        // when
+        database.setupDbTable();
+
+        // then
         // Ensure that the 'users' table exists
         String query = "SHOW TABLES LIKE 'users'";
         ResultSet resultSet = database.executeQuery(query);
         assertTrue(resultSet.next());
 
         // Ensure that there is an admin user in the 'users' table
-        query = "SELECT COUNT(*) AS total FROM users WHERE role = 'ADMIN'";
+        query = "SELECT COUNT(*) AS total FROM users WHERE role = 'ROOT'";
         resultSet = database.executeQuery(query);
         assertNotNull(resultSet);
         assertTrue(resultSet.next());

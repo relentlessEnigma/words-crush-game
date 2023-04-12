@@ -8,7 +8,7 @@ public class Program {
 
     public static void main(String[] args) {
 
-        GameServer server = null;
+        GameServer server;
         try {
             server = new GameServer(8001, 2, "src/main/resources/teste.txt");
         } catch (IOException e) {

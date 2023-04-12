@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <version>1.0.0</version>
+        <mysql.version>8.0.32</mysql.version>
+    </properties>
+
     <groupId>groupId</groupId>
     <artifactId>words-game-console-text-based</artifactId>
     <version>2.0-SNAPSHOT</version>
@@ -22,11 +27,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.tiagoesteves</groupId>
-            <artifactId>observable-pattern</artifactId>
-            <version>1</version>
-        </dependency>
-        <dependency>
             <groupId>org.academiadecodigo</groupId>
             <artifactId>PromptView</artifactId>
             <version>1.0</version>
@@ -34,18 +34,24 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>5.0.1</version>
+            <version>5.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>1.18.26</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.2.0</version> <!-- Replace with the version you want to use -->
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <version>24.0.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -56,24 +62,24 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
+            <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
+            <version>${mysql.version}</version> <!-- keep it in version 5 -->
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.12.4</version>
+            <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
         <!-- PowerMock Mockito -->
