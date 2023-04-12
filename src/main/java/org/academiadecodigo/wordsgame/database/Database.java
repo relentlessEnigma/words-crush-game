@@ -110,6 +110,8 @@ public class Database {
                 "played_games INT NOT NULL DEFAULT 0, " +
                 "wins INT NOT NULL DEFAULT 0, " +
                 "losses INT NOT NULL DEFAULT 0, " +
+                "kick_count INT NOT NULL DEFAULT 0, " +
+                "kick_reason VARCHAR(250), " +
                 "PRIMARY KEY (id)" +
                 ")";
         executeUpdate(query);
@@ -133,7 +135,7 @@ public class Database {
                     connection = DriverManager
                             .getConnection(dataBaseData.completeUrl, dataBaseData.dbRoot, dataBaseData.dbRootPass);
                 } catch (SQLException e) {
-                    //If does not already exists
+                    //If table or db does not exists yet
                     connection = DriverManager
                             .getConnection(dataBaseData.url, dataBaseData.dbRoot, dataBaseData.dbRootPass);
                     setupDbTable();
