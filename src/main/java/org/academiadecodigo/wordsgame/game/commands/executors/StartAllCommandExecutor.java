@@ -21,7 +21,7 @@ public class StartAllCommandExecutor extends CommandExecutor{
     protected String executeValidCommand(String command, User user, List<User> userList) {
         return (user instanceof Admin) ?
                 setAllPlayersReady(userList) :
-                Messages.get("INFO_INSUFFICIENT_ADMIN_RIGHTS");
+                Messages.getMessage("INFO_INSUFFICIENT_ADMIN_RIGHTS");
     }
 
     /**

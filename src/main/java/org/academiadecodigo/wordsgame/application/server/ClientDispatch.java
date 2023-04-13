@@ -1,12 +1,10 @@
-package org.academiadecodigo.wordsgame.entities.client;
+package org.academiadecodigo.wordsgame.application.server;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.academiadecodigo.bootcamp.Prompt;
-import org.academiadecodigo.wordsgame.entities.server.GameServer;
 import org.academiadecodigo.wordsgame.entities.users.*;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
-import org.academiadecodigo.wordsgame.game.ProjectProperties;
 import org.academiadecodigo.wordsgame.game.PromptMenu;
 import org.academiadecodigo.wordsgame.game.grid.game.Grid;
 import org.academiadecodigo.wordsgame.game.stages.Stage;
@@ -22,7 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Setter
 public class ClientDispatch implements Runnable {
 
-    private ProjectProperties properties;
     private Stage actualStage;
     private Prompt prompt;
     private PromptMenu<Integer> promptMenu;
@@ -35,7 +32,6 @@ public class ClientDispatch implements Runnable {
 
     public ClientDispatch(Socket socket, String filePath) {
         this.socket = socket;
-        this.properties = ProjectProperties.getInstance();
 
         this.promptMenu = new PromptMenu<>();
         try {
@@ -113,9 +109,9 @@ public class ClientDispatch implements Runnable {
      * @return
      */
     private String welcomeMessageNotifications(User user) {
-        ChatCommandsMessagesTrafficManager.sendMessageToChat(user, String.format(Messages.get("INFO_CONNECTED_JOINED_WAITING_ROOM"), user.getUserName()));
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(Colors.WHITE_UNDERLINED + user.getUserName() + Colors.RESET + Messages.get("INFO_PLAYER_JUST_CONNECTED"));
-        return (Messages.get("ART_START_GAME"));
+        ChatCommandsMessagesTrafficManager.sendMessageToChat(user, String.format(Messages.getMessage("INFO_CONNECTED_JOINED_WAITING_ROOM"), user.getUserName()));
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(Colors.WHITE_UNDERLINED + user.getUserName() + Colors.RESET + Messages.getMessage("INFO_PLAYER_JUST_CONNECTED"));
+        return (Messages.getMessage("ART_START_GAME"));
     }
 
     /**
@@ -159,8 +155,8 @@ public class ClientDispatch implements Runnable {
      */
     public void sendRules() {
 
-        this.outStream.println(Messages.get("ART_GAME_RULES"));
-        this.outStream.println(Messages.get("INFO_STARTING_GAME_IN"));
+        this.outStream.println(Messages.getMessage("ART_GAME_RULES"));
+        this.outStream.println(Messages.getMessage("INFO_STARTING_GAME_IN"));
 
         for (int i = 10; i >= 0; i--) {
             try {

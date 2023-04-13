@@ -1,7 +1,7 @@
 package org.academiadecodigo.wordsgame.game.stages;
 
 import lombok.Getter;
-import org.academiadecodigo.wordsgame.entities.server.GameServer;
+import org.academiadecodigo.wordsgame.application.server.GameServer;
 import org.academiadecodigo.wordsgame.entities.users.User;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
 import org.academiadecodigo.wordsgame.game.grid.game.Grid;
@@ -19,7 +19,7 @@ public class GameRoom extends Stage {
     public GameRoom(Grid grid, int maxPlayers, List<User> usersInTheRoom) {
         super(grid, maxPlayers, usersInTheRoom);
         this.sg = new ServerGrid();
-        ChatCommandsMessagesTrafficManager.sendMessageToAll(Messages.get("SET_YOURSELF_READY"));
+        ChatCommandsMessagesTrafficManager.sendMessageToAll(Messages.getMessage("SET_YOURSELF_READY"));
     }
 
     public void startStage() {

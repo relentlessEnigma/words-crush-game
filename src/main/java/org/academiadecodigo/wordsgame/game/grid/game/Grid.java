@@ -37,7 +37,7 @@ public class Grid {
         if (linesInFile % 2 == 0) {
             return linesInFile / 10;
         } else {
-            System.out.println(Messages.get("ERROR_FILE_IS_ODD"));
+            System.out.println(Messages.getMessage("ERROR_FILE_IS_ODD"));
         }
         return linesInFile;
     }

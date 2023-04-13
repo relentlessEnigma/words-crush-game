@@ -2,14 +2,18 @@ package org.academiadecodigo.wordsgame.database;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.academiadecodigo.wordsgame.entities.users.Role;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
+import org.academiadecodigo.wordsgame.entities.database.*;
 
 @Getter
 @Setter
@@ -29,7 +33,7 @@ public class Database {
     /**
      * Returns the single instance of the Database class, creating it if necessary.
      * This method uses double-checked locking to ensure that only one instance of
-     * the class is created in a multi-threaded environment.
+     * the class is created in a multiThreaded environment.
      *
      * @return the single instance of the Database class
      * @throws SQLException if an error occurs while creating the database connection
@@ -48,86 +52,87 @@ public class Database {
     /**
      * Starts the database connection using the current environment file.
      *
-     * @throws SQLException if an error occurs while connecting to the database
      */
-    public Connection startDb() {
-        dataBaseData = setVarsFromCurrentEnvFile("application-" + env + ".properties");
-        return connect();
+    public void startDb() {
+        dataBaseData = setVarsFromCurrentEnvFile();
+        connect();
     }
 
     /**
      * Loads the properties from the environment file and returns the corresponding
      * `DatabaseEnvData` object.
      *
-     * @param envFile the name of the environment file
      * @return the `DatabaseEnvData` object containing the database connection information
      */
-    public DatabaseEnvData setVarsFromCurrentEnvFile(String envFile) {
-
-        try (InputStream input = Database.class.getClassLoader().getResourceAsStream(envFile)) {
-            if (input == null) {
-                throw new RuntimeException("Could not find property file: " + envFile);
-            }
-            props.load(input);
-        } catch (IOException ex) {
-            throw new RuntimeException("Error loading property file: " + envFile, ex);
-        }
-
+    public DatabaseEnvData setVarsFromCurrentEnvFile() {
         return new DatabaseEnvData(
-                props.getProperty("db.completeUrl"),
-                props.getProperty("db.url"),
-                props.getProperty("db.username"),
-                props.getProperty("db.password"),
-                props.getProperty("db.name"),
-                props.getProperty("db.inGameRootUser"),
-                props.getProperty("db.inGameRootPass")
+            getFileVariable("db.databaseSetupFilePath"),
+            getFileVariable("db.completeUrl"),
+            getFileVariable("db.url"),
+            getFileVariable("db.username"),
+            getFileVariable("db.password"),
+            getFileVariable("db.name"),
+            getFileVariable("db.inGameRootUser"),
+            getFileVariable("db.inGameRootPass")
         );
+    }
+
+    private String getFileVariable(String variable) {
+        return ResourceBundle.getBundle("application-" + env).getString(variable);
     }
 
     /**
      * Sets up the `users` table in the database if it does not already exist.
      *
-     * @throws SQLException if an error occurs while executing the SQL statements
      */
-    public void setupDbTable() throws SQLException {
+    public void setupDbTable() {
+        // Read the XML file
+        File xmlFile = new File(dataBaseData.databaseSetupFilePath);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        Document doc;
+        try {
+            doc = dbFactory.newDocumentBuilder().parse(xmlFile);
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
 
-        String query = "CREATE DATABASE IF NOT EXISTS " + dataBaseData.getDbName();
-        executeUpdate(query);
+        // Get the root element
+        Element root = doc.getDocumentElement();
 
-        query = "USE " + dataBaseData.getDbName();
-        executeUpdate(query);
+        // Get the list of queries
+        NodeList queryList = root.getElementsByTagName("query");
 
-        query = "CREATE TABLE IF NOT EXISTS users (" +
-                "id INT NOT NULL AUTO_INCREMENT, " +
-                "username VARCHAR(50) NOT NULL, " +
-                "password VARCHAR(50) NOT NULL, " +
-                "role ENUM(" + Arrays.stream(Role.values())
-                .map(role -> "'" + role.name() + "'")
-                .collect(Collectors.joining(","))
-                + ") NOT NULL DEFAULT 'PLAYER', " +
-                "score INT NOT NULL DEFAULT 0, " +
-                "lives INT NOT NULL DEFAULT 3, " +
-                "played_games INT NOT NULL DEFAULT 0, " +
-                "wins INT NOT NULL DEFAULT 0, " +
-                "losses INT NOT NULL DEFAULT 0, " +
-                "kick_count INT NOT NULL DEFAULT 0, " +
-                "kick_reason VARCHAR(250), " +
-                "PRIMARY KEY (id)" +
-                ")";
-        executeUpdate(query);
-        query = String.format("INSERT INTO users (username, password, role) VALUES ('%s', '%s', '%s');",
-                dataBaseData.inGameRootUser, dataBaseData.inGameRootPass, Role.ROOT);
-        executeUpdate(query);
+        // Iterate through each query
+        for (int i = 0; i < queryList.getLength(); i++) {
+            Element queryElement = (Element) queryList.item(i);
+
+            // Get the SQL query and its parameters from the XML file
+            String sql = queryElement.getElementsByTagName("sql").item(0).getTextContent();
+            NodeList paramList = queryElement.getElementsByTagName("param");
+
+            // Prepare the parameters for the SQL query
+            String[] params = new String[paramList.getLength()];
+            for (int j = 0; j < paramList.getLength(); j++) {
+                Element paramElement = (Element) paramList.item(j);
+                String paramName = paramElement.getTextContent(); // dbName
+                DataBaseVariablesType variableType = DataBaseVariablesType.valueOf(paramName);
+                params[j] = variableType.getFieldValue(dataBaseData);
+            }
+
+            // Format the SQL query with the parameters
+            String formattedSql = String.format(sql, (Object[]) params);
+
+            // Execute the SQL query
+            executeUpdate(formattedSql);
+        }
     }
 
     /**
      * Connects to the database using the connection information stored in the
      * `dataBaseData` field.
      *
-     * @return the database connection object
-     * @throws SQLException if an error occurs while connecting to the database
      */
-    private Connection connect() {
+    private void connect() {
         try {
             if (connection == null || connection.isClosed()) {
                 try {
@@ -135,7 +140,7 @@ public class Database {
                     connection = DriverManager
                             .getConnection(dataBaseData.completeUrl, dataBaseData.dbRoot, dataBaseData.dbRootPass);
                 } catch (SQLException e) {
-                    //If table or db does not exists yet
+                    //If table or db do not exist yet
                     connection = DriverManager
                             .getConnection(dataBaseData.url, dataBaseData.dbRoot, dataBaseData.dbRootPass);
                     setupDbTable();
@@ -144,7 +149,6 @@ public class Database {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return connection;
     }
 
     /**
@@ -201,7 +205,7 @@ public class Database {
     }
 
     /**
-     * Delets current instance of DataBase
+     * Deletes current instance of DataBase
      */
     public void closeInstance() {
         close();

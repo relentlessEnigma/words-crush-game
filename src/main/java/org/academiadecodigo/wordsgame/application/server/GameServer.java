@@ -1,8 +1,7 @@
-package org.academiadecodigo.wordsgame.entities.server;
+package org.academiadecodigo.wordsgame.application.server;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
 import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
@@ -36,8 +35,8 @@ public class GameServer {
 
         this.db.startDb();
 
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_SERVER_ON"));
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_PORT") + portNumber);
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.getMessage("INFO_SERVER_ON"));
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.getMessage("INFO_PORT") + portNumber);
     }
 
     public void manageNewConnections() {
@@ -48,7 +47,7 @@ public class GameServer {
                 ClientDispatch clientDispatch = new ClientDispatch(clientSocket, filePath);
                 executorCompletionService.submit(clientDispatch, null);
                 numClients++;
-                ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.get("INFO_NEWCONNECTION") + numClients);
+                ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.getMessage("INFO_NEWCONNECTION") + numClients);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -3,7 +3,7 @@ package org.academiadecodigo.wordsgame.entities.users;
 import lombok.Getter;
 import lombok.Setter;
 import org.academiadecodigo.wordsgame.game.stages.*;
-import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
+import org.academiadecodigo.wordsgame.application.server.ClientDispatch;
 import java.io.IOException;
 import java.net.Socket;
 

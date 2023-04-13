@@ -1,6 +1,6 @@
 package entities.server;
 
-import org.academiadecodigo.wordsgame.entities.server.GameServer;
+import org.academiadecodigo.wordsgame.application.server.GameServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,8 +22,8 @@ class GameServerTest {
 
     @BeforeEach
     void setUp() throws IOException, SQLException {
-        gameServer = null;
         MockitoAnnotations.openMocks(this);
+        gameServer = null;
         gameServer = new GameServer(PORT_NUMBER, NUM_THREADS, FILE_PATH);
         gameServer.setExecutorCompletionService(mockExecutorCompletionService);
     }
@@ -53,7 +53,6 @@ class GameServerTest {
     @Test
     void testClose() throws IOException {
         gameServer.close();
-
         // Check that the executor is shutdown
         assertTrue(gameServer.getExecutor().isShutdown());
     }

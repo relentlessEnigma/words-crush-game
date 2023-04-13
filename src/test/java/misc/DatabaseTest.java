@@ -13,11 +13,11 @@ import java.sql.Statement;
 public class DatabaseTest {
 
     private Database database;
-    private final String ENV_TEST = "test";
 
     @BeforeEach
     public void setUp() throws SQLException {
         database = Database.getInstance();
+        String ENV_TEST = "test";
         database.setEnv(ENV_TEST);
         database.startDb();
     }
@@ -30,10 +30,9 @@ public class DatabaseTest {
     @Test
     @Order(1)
     public void testSetVarsFromCurrentEnvFile() {
-        String envFile = "application-" + ENV_TEST + ".properties";
-        DatabaseEnvData data = database.setVarsFromCurrentEnvFile(envFile);
+        DatabaseEnvData data = database.setVarsFromCurrentEnvFile();
         assertNotNull(data);
-        assertEquals("jdbc:mysql://localhost:3307/wordscrush_test", data.getCompleteUrl());
+        assertEquals("jdbc:mysql://localhost:3306/wordscrush_test", data.getCompleteUrl());
         assertEquals("root", data.getDbRoot());
         assertEquals("1010", data.getDbRootPass());
         assertEquals("wordscrush_test", data.getDbName());
@@ -90,8 +89,7 @@ public class DatabaseTest {
     @Test
     @Order(6)
     public void testDropDatabase() throws SQLException {
-        String envFile = "application-" + ENV_TEST + ".properties";
-        DatabaseEnvData data = database.setVarsFromCurrentEnvFile(envFile);
+        DatabaseEnvData data = database.setVarsFromCurrentEnvFile();
 
         Statement statement = database.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(

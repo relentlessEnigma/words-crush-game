@@ -19,6 +19,6 @@ public class KickCommandExecutor extends CommandExecutor{
 
     @Override
     protected String executeValidCommand(String command, User user, List<User> userList) {
-        return (user instanceof Admin) ? ChatCommandsMessagesTrafficManager.commandKick(user) : Messages.get("INFO_INSUFFICIENT_ADMIN_RIGHTS");
+        return (user instanceof Admin) ? ChatCommandsMessagesTrafficManager.commandKick(user) : Messages.getMessage("INFO_INSUFFICIENT_ADMIN_RIGHTS");
     }
 }

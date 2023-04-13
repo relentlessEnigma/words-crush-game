@@ -1,0 +1,45 @@
+<dbQueries>
+    <query>
+        <sql>CREATE DATABASE IF NOT EXISTS %s</sql>
+        <params>
+            <param>DB_NAME</param>
+        </params>
+    </query>
+    <query>
+        <sql>USE %s ;</sql>
+        <params>
+            <param>DB_NAME</param>
+        </params>
+    </query>
+    <query>
+        <sql>CREATE TABLE IF NOT EXISTS users
+            (id INT NOT NULL AUTO_INCREMENT,
+            username VARCHAR(50) NOT NULL,
+            password VARCHAR(50) NOT NULL,
+            role ENUM(%s) NOT NULL DEFAULT 'PLAYER',
+            score INT NOT NULL DEFAULT 0,
+            lives INT NOT NULL DEFAULT 3,
+            played_games INT NOT NULL DEFAULT 0,
+            wins INT NOT NULL DEFAULT 0,
+            losses INT NOT NULL DEFAULT 0,
+            kick_count INT NOT NULL DEFAULT 0,
+            kick_reason VARCHAR(250),
+            PRIMARY KEY (id));
+        </sql>
+        <params>
+            <param>AVAILABLE_ROLES</param>
+        </params>
+    </query>
+    <query>
+        <sql>INSERT INTO users (username, password, role)
+            SELECT '%s', '%s', '%s'
+            WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = '%s');
+        </sql>
+        <params>
+            <param>DB_IN_GAME_ROOT_USER</param>
+            <param>DB_IN_GAME_ROOT_PASS</param>
+            <param>DB_IN_GAME_ROOT_ROLE</param>
+            <param>DB_IN_GAME_ROOT_USER</param>
+        </params>
+    </query>
+</dbQueries>

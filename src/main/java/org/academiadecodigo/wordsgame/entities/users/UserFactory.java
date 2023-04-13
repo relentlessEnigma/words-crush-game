@@ -1,10 +1,9 @@
 package org.academiadecodigo.wordsgame.entities.users;
 
 import org.academiadecodigo.bootcamp.Prompt;
-import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
-import org.academiadecodigo.wordsgame.entities.server.GameServer;
+import org.academiadecodigo.wordsgame.application.server.ClientDispatch;
+import org.academiadecodigo.wordsgame.application.server.GameServer;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
-import org.academiadecodigo.wordsgame.game.ProjectProperties;
 import org.academiadecodigo.wordsgame.game.PromptMenu;
 import org.academiadecodigo.wordsgame.game.grid.game.Grid;
 import org.academiadecodigo.wordsgame.game.stages.Stage;
@@ -25,7 +24,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class UserFactory {
 
-    private ProjectProperties properties;
     private int count = 0;
     private PromptMenu<String> promptMenu = new PromptMenu();
     private Prompt prompt;
@@ -35,7 +33,6 @@ public class UserFactory {
 
     public UserFactory(Prompt prompt, String filePath, @NotNull ClientDispatch clientDispatch){
         this.prompt = prompt;
-        this.properties = ProjectProperties.getInstance();
         this.actualStage = createInstanceOfStage(filePath);
         this.clientDispatch = clientDispatch;
         this.socket = clientDispatch.getSocket();
@@ -59,16 +56,16 @@ public class UserFactory {
 
         if(count == 3) System.exit(0);
 
-        String userName = promptMenu.createNewQuestion(Messages.get("INFO_SET_NICKNAME"), prompt);
-        String password = promptMenu.createNewQuestion(Messages.get("INFO_SET_PASSWORD"), prompt);
+        String userName = promptMenu.createNewQuestion(Messages.getMessage("INFO_SET_NICKNAME"), prompt);
+        String password = promptMenu.createNewQuestion(Messages.getMessage("INFO_SET_PASSWORD"), prompt);
 
         if( isUserAdmin(userName, password) ) {
             setUserRole(Role.ADMIN, userName);
         }
 
-        if(userName.equals(properties.getProperty("admin.name"))) {
-            setupUser();
-        }
+//        if(userName.equals(properties.getProperty("admin.name"))) {
+//            setupUser();
+//        }
 
         return setUserRole(Role.PLAYER, userName);
     }
@@ -137,8 +134,9 @@ public class UserFactory {
      */
     private boolean adminLogin(){
         failedTry();
-        return promptMenu.createNewQuestion(Messages.get("INPUT_ADMIN_PASSWORD"), prompt)
-                .equals(properties.getProperty("admin.password"));
+//        return promptMenu.createNewQuestion(Messages.getMessage("INPUT_ADMIN_PASSWORD"), prompt)
+//                .equals(properties.getProperty("admin.password"));
+        return false;
     }
 
     /**
@@ -147,7 +145,7 @@ public class UserFactory {
      */
     private @NotNull Admin setupNewAdminAccount() {
         resetTries();
-        String userName = promptMenu.createNewQuestion(Messages.get("INFO_SET_NICKNAME"), prompt);
+        String userName = promptMenu.createNewQuestion(Messages.getMessage("INFO_SET_NICKNAME"), prompt);
         return new Admin(String.format("[ADMIN]%s", userName),0, 3, false, this.clientDispatch, socket, actualStage, false);
     }
 
@@ -173,9 +171,9 @@ public class UserFactory {
      * @return
      */
     private String welcomeMessageNotifications(User user) {
-        ChatCommandsMessagesTrafficManager.sendMessageToChat(user, String.format(Messages.get("INFO_CONNECTED_JOINED_WAITING_ROOM"), user.getUserName()));
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(Colors.WHITE_UNDERLINED + user.getUserName() + Colors.RESET + Messages.get("INFO_PLAYER_JUST_CONNECTED"));
-        return (Messages.get("ART_START_GAME"));
+        ChatCommandsMessagesTrafficManager.sendMessageToChat(user, String.format(Messages.getMessage("INFO_CONNECTED_JOINED_WAITING_ROOM"), user.getUserName()));
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(Colors.WHITE_UNDERLINED + user.getUserName() + Colors.RESET + Messages.getMessage("INFO_PLAYER_JUST_CONNECTED"));
+        return (Messages.getMessage("ART_START_GAME"));
     }
 
     /**

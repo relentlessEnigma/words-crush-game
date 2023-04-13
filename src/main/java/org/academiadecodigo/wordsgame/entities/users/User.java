@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import org.academiadecodigo.wordsgame.entities.client.ClientDispatch;
+import org.academiadecodigo.wordsgame.application.server.ClientDispatch;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
 import org.academiadecodigo.wordsgame.game.stages.FinishRoom;
 import org.academiadecodigo.wordsgame.game.stages.GameRoom;
@@ -117,7 +117,7 @@ public abstract class User implements Runnable {
         if(getLives() > 0) {
             ChatCommandsMessagesTrafficManager.clearScreen(this);
             getClientDispatch().notifyPlayer(getActualStage().getGrid().drawMatrix());
-            getClientDispatch().notifyPlayer(String.format(Messages.get("SHOW_PLAYER_SCORES"), getScore(), getLives()));
+            getClientDispatch().notifyPlayer(String.format(Messages.getMessage("SHOW_PLAYER_SCORES"), getScore(), getLives()));
             getActualStage().checkUserInput(this, getUserInput());
         } else {
             getActualStage().playerLost(this);

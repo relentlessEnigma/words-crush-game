@@ -1,6 +1,6 @@
 package org.academiadecodigo.wordsgame.application;
 
-import org.academiadecodigo.wordsgame.entities.server.GameServer;
+import org.academiadecodigo.wordsgame.application.server.GameServer;
 import java.io.IOException;
 import java.sql.SQLException;
 

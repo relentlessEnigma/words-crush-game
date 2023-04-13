@@ -1,13 +1,12 @@
 package org.academiadecodigo.wordsgame.game.grid.server;
 
 import org.academiadecodigo.wordsgame.entities.users.User;
-import org.academiadecodigo.wordsgame.game.ProjectProperties;
 import org.academiadecodigo.wordsgame.misc.Messages;
 import java.util.*;
 
 public class ServerGrid {
 
-    private final static int ROWS = (Integer.parseInt(ProjectProperties.getInstance().getProperty("server.grid.rows.number")));
+    private final static int ROWS = (Integer.parseInt(Messages.getProperty("server.grid.rows.number")));
     private ScoresService sc;
 
     public ServerGrid() {
@@ -41,8 +40,8 @@ public class ServerGrid {
         String[][] grid = createGridStructure(userList.size());
         sendPlayerScoresToGrid(userList, grid);
 
-        sb.append(Messages.get("SERVER_SCORE_DASHBOARD") + Messages.get("BREAK_LINE"));
-        sb.append(Messages.get("SERVER_SCORE_DASHBOARD_PLAYER_NAME") + Messages.get("BREAK_LINE"));
+        sb.append(Messages.getMessage("SERVER_SCORE_DASHBOARD") + Messages.getMessage("BREAK_LINE"));
+        sb.append(Messages.getMessage("SERVER_SCORE_DASHBOARD_PLAYER_NAME") + Messages.getMessage("BREAK_LINE"));
         for (User user : userList) {
             sb.append(user.getUserName().charAt(0)).append(user.getUserName().charAt(1)).append(" ");
         }
