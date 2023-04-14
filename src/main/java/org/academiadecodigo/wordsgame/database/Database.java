@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import org.academiadecodigo.wordsgame.entities.database.*;
@@ -82,10 +83,40 @@ public class Database {
     }
 
     /**
+     * Connects to the database using the connection information stored in the
+     * `dataBaseData` field.
+     *
+     */
+    private void connect() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                try {
+                    //If already exists
+                    connection = DriverManager
+                            .getConnection(dataBaseData.completeUrl, dataBaseData.dbRoot, dataBaseData.dbRootPass);
+                } catch (SQLException e) {
+                    //If table or db do not exist yet
+                    connection = DriverManager
+                            .getConnection(dataBaseData.url, dataBaseData.dbRoot, dataBaseData.dbRootPass);
+                    setupDbStructure();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Sets up the `users` table in the database if it does not already exist.
      *
      */
-    public void setupDbTable() {
+    public void setupDbStructure() {
+        Arrays.stream(QueryType.values())
+                .filter(query -> query != QueryType.QUERY_WORDS) // Exclude QUERY_WORDS enum value
+                .forEach(this::setupDBStaticStructure);
+    }
+
+    private void setupDBStaticStructure(QueryType queryType) {
         // Read the XML file
         File xmlFile = new File(dataBaseData.databaseSetupFilePath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -100,7 +131,7 @@ public class Database {
         Element root = doc.getDocumentElement();
 
         // Get the list of queries
-        NodeList queryList = root.getElementsByTagName("query");
+        NodeList queryList = root.getElementsByTagName(queryType.getParam());
 
         // Iterate through each query
         for (int i = 0; i < queryList.getLength(); i++) {
@@ -124,30 +155,6 @@ public class Database {
 
             // Execute the SQL query
             executeUpdate(formattedSql);
-        }
-    }
-
-    /**
-     * Connects to the database using the connection information stored in the
-     * `dataBaseData` field.
-     *
-     */
-    private void connect() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                try {
-                    //If already exists
-                    connection = DriverManager
-                            .getConnection(dataBaseData.completeUrl, dataBaseData.dbRoot, dataBaseData.dbRootPass);
-                } catch (SQLException e) {
-                    //If table or db do not exist yet
-                    connection = DriverManager
-                            .getConnection(dataBaseData.url, dataBaseData.dbRoot, dataBaseData.dbRootPass);
-                    setupDbTable();
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -211,4 +218,6 @@ public class Database {
         close();
         instance = null;
     }
+
+
 }

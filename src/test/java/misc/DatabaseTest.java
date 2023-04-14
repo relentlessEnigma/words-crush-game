@@ -69,7 +69,7 @@ public class DatabaseTest {
     @Order(5)
     public void testSetupDbTable() throws SQLException {
         // when
-        database.setupDbTable();
+        database.setupDbStructure();
 
         // then
         // Ensure that the 'users' table exists

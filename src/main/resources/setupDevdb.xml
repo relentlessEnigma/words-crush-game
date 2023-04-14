@@ -1,17 +1,17 @@
 <dbQueries>
-    <query>
+    <query-db>
         <sql>CREATE DATABASE IF NOT EXISTS %s</sql>
         <params>
             <param>DB_NAME</param>
         </params>
-    </query>
-    <query>
+    </query-db>
+    <query-db>
         <sql>USE %s ;</sql>
         <params>
             <param>DB_NAME</param>
         </params>
-    </query>
-    <query>
+    </query-db>
+    <query-users>
         <sql>CREATE TABLE IF NOT EXISTS users
             (id INT NOT NULL AUTO_INCREMENT,
             username VARCHAR(50) NOT NULL,
@@ -29,8 +29,8 @@
         <params>
             <param>AVAILABLE_ROLES</param>
         </params>
-    </query>
-    <query>
+    </query-users>
+    <query-users>
         <sql>INSERT INTO users (username, password, role)
             SELECT '%s', '%s', '%s'
             WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = '%s');
@@ -41,5 +41,19 @@
             <param>DB_IN_GAME_ROOT_ROLE</param>
             <param>DB_IN_GAME_ROOT_USER</param>
         </params>
-    </query>
+    </query-users>
+    <query-words>
+        <sql>
+            CREATE TABLE IF NOT EXISTS words
+            (id INT NOT NULL AUTO_INCREMENT,
+            word VARCHAR(50) NOT NULL
+            PRIMARY KEY (id));
+        </sql>
+        <params></params>
+    </query-words>
+    <query-words>
+        <sql>
+            INSERT INTO words (word) VALUES ('%s');
+        </sql>
+    </query-words>
 </dbQueries>
