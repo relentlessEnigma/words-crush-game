@@ -46,14 +46,15 @@
         <sql>
             CREATE TABLE IF NOT EXISTS words
             (id INT NOT NULL AUTO_INCREMENT,
-            word VARCHAR(50) NOT NULL
+            word VARCHAR(50) NOT NULL,
             PRIMARY KEY (id));
         </sql>
         <params></params>
     </query-words>
     <query-words>
         <sql>
-            INSERT INTO words (word) VALUES ('%s');
+            INSERT INTO words (word) VALUES ('word');
         </sql>
     </query-words>
+
 </dbQueries>

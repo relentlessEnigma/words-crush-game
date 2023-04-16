@@ -14,6 +14,8 @@ import org.academiadecodigo.wordsgame.misc.Messages;
 import org.jetbrains.annotations.NotNull;
 import java.io.*;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Getter
@@ -25,6 +27,8 @@ public class ClientDispatch implements Runnable {
     private PromptMenu<Integer> promptMenu;
     private int count = 0;
     private UserManager um;
+    private Boolean isPlayerNotReading = false;
+    private LinkedList<String> bufferedMessages;
 
     private ChatCommandsMessagesTrafficManager chat;
     private Socket socket;
@@ -32,8 +36,8 @@ public class ClientDispatch implements Runnable {
 
     public ClientDispatch(Socket socket, String filePath) {
         this.socket = socket;
-
         this.promptMenu = new PromptMenu<>();
+        
         try {
             this.prompt = new Prompt(socket.getInputStream(), new PrintStream(socket.getOutputStream()));
             this.outStream = new PrintWriter(socket.getOutputStream(), true);
@@ -43,6 +47,7 @@ public class ClientDispatch implements Runnable {
 
         this.actualStage = createInstanceOfStage(filePath);
         this.chat = new ChatCommandsMessagesTrafficManager();
+        this.bufferedMessages = new LinkedList<>();
     }
 
     @Override
@@ -175,6 +180,24 @@ public class ClientDispatch implements Runnable {
      * @param message to be sent.
      */
     public void notifyPlayer(String message) {
+
+        // saves the message to the list
+        if(isPlayerNotReading) {
+            this.bufferedMessages.add(message);
+            return;
+        } 
+
+        // send the last message
         this.outStream.println(message);
+    }
+
+    private void sendBufferedMessagesToPlayer() {
+        Optional.ofNullable(bufferedMessages).ifPresent(msg -> msg.forEach(this.outStream::println));
+        this.bufferedMessages.clear();
+    }
+
+    public void setIsPlayerNotReading(Boolean state) {
+        this.isPlayerNotReading = state;
+        if(!state) this.sendBufferedMessagesToPlayer();
     }
 }

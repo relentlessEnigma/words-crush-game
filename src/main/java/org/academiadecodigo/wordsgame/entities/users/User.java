@@ -98,6 +98,8 @@ public abstract class User implements Runnable {
         try {
             if (this.getSocket().getInputStream().available() > 0) {
                 getActualStage().checkUserInput(this, getUserInput());
+                this.getClientDispatch().setIsPlayerNotReading(false);
+
             }
         } catch (IOException e) {
             e.printStackTrace();

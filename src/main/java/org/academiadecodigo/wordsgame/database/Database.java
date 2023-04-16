@@ -112,7 +112,7 @@ public class Database {
      */
     public void setupDbStructure() {
         Arrays.stream(QueryType.values())
-                .filter(query -> query != QueryType.QUERY_WORDS) // Exclude QUERY_WORDS enum value
+                //.filter(query -> query != QueryType.QUERY_WORDS) // Exclude QUERY_WORDS enum value
                 .forEach(this::setupDBStaticStructure);
     }
 

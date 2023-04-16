@@ -18,7 +18,14 @@ public class WaitingRoom extends Stage {
     }
 
     public static WaitingRoom getInstance(Grid grid, int maxPlayers, List<User> usersInTheRoom){
-        return (waitingRoom == null) ? waitingRoom = new WaitingRoom(grid, maxPlayers, usersInTheRoom) : waitingRoom;
+        if (waitingRoom == null) {
+            synchronized (WaitingRoom.class) {
+                if (waitingRoom == null) {
+                    waitingRoom = new WaitingRoom(grid, maxPlayers, usersInTheRoom);
+                }
+            }
+        }
+        return waitingRoom;
     }
 
     /**
@@ -35,13 +42,15 @@ public class WaitingRoom extends Stage {
      * @param message
      */
     @Override
-    public synchronized void checkUserInput(User user, String message) {
+    public void checkUserInput(User user, String message) {
 
         if (message.startsWith("/")) {
             user.getClientDispatch().notifyPlayer(getCommandRunner().runCommand(message, user, getUsersInTheRoom()));
             return;
         }
-        ChatCommandsMessagesTrafficManager.sendMessageToChat(user, message);
+        synchronized(this) {
+            ChatCommandsMessagesTrafficManager.sendMessageToChat(user, message);
+        }
     }
 
     /**
