@@ -1,5 +1,4 @@
-package org.academiadecodigo.wordsgame.repository;
-
+package org.academiadecodigo.wordsgame.service;
 import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.entities.users.Role;
 import java.sql.PreparedStatement;

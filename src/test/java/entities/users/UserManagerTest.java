@@ -5,7 +5,7 @@ import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.entities.users.Role;
 import org.academiadecodigo.wordsgame.entities.users.UserManager;
-import org.academiadecodigo.wordsgame.repository.UserAuthenticator;
+import org.academiadecodigo.wordsgame.service.UserAuthenticator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

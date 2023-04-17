@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.academiadecodigo.wordsgame.game.ChatCommandsMessagesTrafficManager;
 import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.misc.Messages;
+import org.academiadecodigo.wordsgame.service.UserService;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

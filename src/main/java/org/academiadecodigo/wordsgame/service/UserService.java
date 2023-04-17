@@ -1,4 +1,4 @@
-package org.academiadecodigo.wordsgame.repository;
+package org.academiadecodigo.wordsgame.service;
 
 import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.entities.users.User;
@@ -7,11 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class UserRepository {
+public class UserService {
     private Database database;
 
-    public UserRepository() throws SQLException {
-        this.database = Database.getInstance();
+    public UserService() {
+        try {
+            this.database = Database.getInstance();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Map<String, String> getUserById(int id) throws SQLException {
@@ -33,5 +37,14 @@ public class UserRepository {
 
     public void deleteUser(int id) {
         // implementation to delete user from database
+    }
+
+    public void saveScore(int score) {
+        // TODO missing implementation
+    }
+
+    public int getScore() {
+        // TODO missing implementation
+        return 0;
     }
 }

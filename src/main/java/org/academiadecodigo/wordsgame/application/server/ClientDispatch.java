@@ -87,7 +87,7 @@ public class ClientDispatch implements Runnable {
         if(actualStage.getUsersInTheRoom().size() == GameServer.MAX_CLIENTS) createAndStartNewThread(actualStage);
 
         createAndStartNewThread(user);
-        notifyPlayer(welcomeMessageNotifications(user));
+        welcomeMessageNotifications(user);
     }
 
     /**
@@ -113,10 +113,11 @@ public class ClientDispatch implements Runnable {
      * @param user
      * @return
      */
-    private String welcomeMessageNotifications(User user) {
+    private void welcomeMessageNotifications(User user) {
         ChatCommandsMessagesTrafficManager.sendMessageToChat(user, String.format(Messages.getMessage("INFO_CONNECTED_JOINED_WAITING_ROOM"), user.getUserName()));
-        ChatCommandsMessagesTrafficManager.sendMessageToServer(Colors.WHITE_UNDERLINED + user.getUserName() + Colors.RESET + Messages.getMessage("INFO_PLAYER_JUST_CONNECTED"));
-        return (Messages.getMessage("ART_START_GAME"));
+        ChatCommandsMessagesTrafficManager.sendMessageToServer(
+                String.format(Messages.getMessage("INFO_PLAYER_JUST_CONNECTED"), Colors.WHITE_UNDERLINED, user.getUserName(), Colors.RESET)
+        );
     }
 
     /**
@@ -165,7 +166,7 @@ public class ClientDispatch implements Runnable {
 
         for (int i = 10; i >= 0; i--) {
             try {
-                Thread.sleep(0); //TODO: correct this to 1000 mss again
+                Thread.sleep(1000); //TODO: correct this to 1000 mss again
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -185,7 +186,7 @@ public class ClientDispatch implements Runnable {
         if(isPlayerNotReading) {
             this.bufferedMessages.add(message);
             return;
-        } 
+        }
 
         // send the last message
         this.outStream.println(message);
@@ -193,6 +194,7 @@ public class ClientDispatch implements Runnable {
 
     private void sendBufferedMessagesToPlayer() {
         Optional.ofNullable(bufferedMessages).ifPresent(msg -> msg.forEach(this.outStream::println));
+        assert this.bufferedMessages != null;
         this.bufferedMessages.clear();
     }
 

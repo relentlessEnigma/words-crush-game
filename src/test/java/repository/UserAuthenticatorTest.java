@@ -3,7 +3,7 @@ package repository;
 import org.academiadecodigo.wordsgame.database.Database;
 import org.academiadecodigo.wordsgame.database.DatabaseEnvData;
 import org.academiadecodigo.wordsgame.entities.users.Role;
-import org.academiadecodigo.wordsgame.repository.UserAuthenticator;
+import org.academiadecodigo.wordsgame.service.UserAuthenticator;
 import org.junit.jupiter.api.*;
 import java.sql.SQLException;
 import java.util.Objects;

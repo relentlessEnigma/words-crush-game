@@ -43,7 +43,6 @@ public class WaitingRoom extends Stage {
      */
     @Override
     public void checkUserInput(User user, String message) {
-
         if (message.startsWith("/")) {
             user.getClientDispatch().notifyPlayer(getCommandRunner().runCommand(message, user, getUsersInTheRoom()));
             return;

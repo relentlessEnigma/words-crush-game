@@ -97,9 +97,10 @@ public abstract class User implements Runnable {
     protected void behaviourInWaitingRoom() {
         try {
             if (this.getSocket().getInputStream().available() > 0) {
+                this.clientDispatch.setIsPlayerNotReading(true);
+                System.out.println(this.clientDispatch.getIsPlayerNotReading());
                 getActualStage().checkUserInput(this, getUserInput());
                 this.getClientDispatch().setIsPlayerNotReading(false);
-
             }
         } catch (IOException e) {
             e.printStackTrace();

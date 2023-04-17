@@ -24,8 +24,6 @@ public class PmCommandExecutor extends CommandExecutor{
     @Override
     protected String executeValidCommand(String command, User user, List<User> usersList) {
 
-        user.getClientDispatch().setIsPlayerNotReading(true);
-
         if(usersList.size() == 1) {
             return Messages.getMessage("ERROR_NOT_ENOUGH_PLAYERS_IN_ROOM");
         }
