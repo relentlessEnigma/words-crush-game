@@ -27,6 +27,12 @@ public class UserService {
         return Map.of(userName, password);
     }
 
+    public void createNewUser() {
+        //CReate clientDispatch
+
+        //Create User and send clientDispatch inside it
+    }
+
     public void getUsers() {
         // implementation to retrieve list of users from database
     }
