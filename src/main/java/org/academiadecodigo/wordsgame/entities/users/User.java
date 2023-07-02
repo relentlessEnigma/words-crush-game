@@ -18,6 +18,7 @@ import org.academiadecodigo.wordsgame.misc.Messages;
 @Setter
 public abstract class User implements Runnable {
 
+    private int id;
     private String userName;
     private ClientDispatch clientDispatch;
     private Socket socket;
@@ -27,7 +28,8 @@ public abstract class User implements Runnable {
     private boolean isReady;
     private boolean readRules;
 
-    public User(String userName, int score, int lives, boolean isReady, ClientDispatch clientDispatch, Socket socket, Stage actualStage, Boolean readRules) {
+    public User(int id, String userName, int score, int lives, boolean isReady, ClientDispatch clientDispatch, Socket socket, Stage actualStage, Boolean readRules) {
+        this.id = id;
         this.userName = userName;
         this.score = score;
         this.lives = lives;

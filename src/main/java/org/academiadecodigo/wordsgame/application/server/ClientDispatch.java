@@ -22,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Setter
 public class ClientDispatch implements Runnable {
 
+    private int id;
     private Stage actualStage;
     private Prompt prompt;
     private PromptMenu<Integer> promptMenu;
@@ -96,7 +97,7 @@ public class ClientDispatch implements Runnable {
      * @return Player Account
      */
     private @NotNull Player setupNewPlayerAccount(String str) {
-        return new Player(str, 0, 3, false, this, socket, actualStage, false, false);
+        return new Player(this.id, str, 0, 3, false, this, socket, actualStage, false, false);
     }
 
     /**
@@ -105,7 +106,7 @@ public class ClientDispatch implements Runnable {
      */
     private @NotNull Admin setupNewAdminAccount() {
         // TODO: in future get this data from DTO
-        return new Admin(String.format("[ADMIN]%s", this.um.getUserName()),0, 3, false, this, socket, actualStage, false);
+        return new Admin(this.id, String.format("[ADMIN]%s", this.um.getUserName()),0, 3, false, this, socket, actualStage, false);
     }
 
     /**
@@ -166,7 +167,7 @@ public class ClientDispatch implements Runnable {
 
         for (int i = 10; i >= 0; i--) {
             try {
-                Thread.sleep(1000); //TODO: correct this to 1000 mss again
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

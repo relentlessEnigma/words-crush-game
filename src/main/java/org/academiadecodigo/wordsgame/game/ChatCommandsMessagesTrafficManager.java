@@ -99,9 +99,9 @@ public class ChatCommandsMessagesTrafficManager {
     public static void sendMessageToChat(User userOrigin, String message) {
 
         for(User u : usersList) {
-            if(!u.equals(userOrigin)) {
+//            if(!u.equals(userOrigin)) {
                 u.getClientDispatch().notifyPlayer(String.format("%s: %s", userOrigin.getUserName(),message));
-            }
+//            }
         }
     }
 

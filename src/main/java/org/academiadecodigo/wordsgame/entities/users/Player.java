@@ -13,8 +13,8 @@ public class Player extends User {
 
     private boolean isKicked;
 
-    public Player(String userName, int score, int lives, boolean isReady, ClientDispatch clientDispatch, Socket socket, Stage actualStage, boolean isKicked, boolean isReadyConfirmed) {
-        super(userName, score, lives, isReady, clientDispatch, socket, actualStage, isReadyConfirmed);
+    public Player(int id, String userName, int score, int lives, boolean isReady, ClientDispatch clientDispatch, Socket socket, Stage actualStage, boolean isKicked, boolean isReadyConfirmed) {
+        super(id, userName, score, lives, isReady, clientDispatch, socket, actualStage, isReadyConfirmed);
         this.isKicked = isKicked;
     }
 

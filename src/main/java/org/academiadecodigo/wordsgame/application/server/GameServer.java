@@ -41,14 +41,14 @@ public class GameServer {
     }
 
     public void manageNewConnections() {
-        int numClients = 0;
-        while (numClients < nThreads) {
+        int clientNumber = 0;
+        while (clientNumber < nThreads) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 ClientDispatch clientDispatch = new ClientDispatch(clientSocket, filePath);
                 executorCompletionService.submit(clientDispatch, null);
-                numClients++;
-                ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.getMessage("INFO_NEWCONNECTION") + numClients);
+                clientNumber++;
+                ChatCommandsMessagesTrafficManager.sendMessageToServer(Messages.getMessage("INFO_NEWCONNECTION") + clientNumber);
             } catch (IOException e) {
                 e.printStackTrace();
             }

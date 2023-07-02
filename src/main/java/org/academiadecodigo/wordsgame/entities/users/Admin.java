@@ -10,8 +10,8 @@ import java.net.Socket;
 @Setter
 public class Admin extends User implements Runnable {
 
-    public Admin(String userName, int score, int lives, boolean isReady, ClientDispatch clientDispatch, Socket socket, Stage actualStage, Boolean isReadyConfirmed) {
-        super(userName, score, lives, isReady, clientDispatch, socket, actualStage, isReadyConfirmed);
+    public Admin(int id, String userName, int score, int lives, boolean isReady, ClientDispatch clientDispatch, Socket socket, Stage actualStage, Boolean isReadyConfirmed) {
+        super(id, userName, score, lives, isReady, clientDispatch, socket, actualStage, isReadyConfirmed);
     }
 
     @Override
